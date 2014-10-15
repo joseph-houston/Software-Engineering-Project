@@ -2,6 +2,7 @@
 <%@ page session="false" %>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>${title }</title>
 	<link href="<c:url value="/resources/vendor/bootstrap/css/bootstrap.min.css" />" rel="stylesheet"  type="text/css" />		
 	<link href="<c:url value="/resources/css/main.css" />" rel="stylesheet"  type="text/css" />
@@ -79,7 +80,7 @@
         </div>
         
         
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-md-10 col-md-offset-2 main">
 	        <div class="row controls">
 		       <c:choose>
 					<c:when test="${reportType == 'kanban-workflow-warnings'}">
@@ -128,10 +129,11 @@
 					 	</div>
 						<div class=col-mid-2">
 							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
-						</div>	
+						</div>
+						<div class="clearfix"></div>	
 						<hr> 
 						<div class="report-data">
-							Kanban Workflow Warnings Report data
+							${reportData }
 						</div>  
 					</c:when>
 					
@@ -183,9 +185,10 @@
 						<div class=col-mid-2">
 							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
 						</div>	
+						<div class="clearfix"></div>	
 						<hr> 
 						<div class="report-data">
-							Kanban Activity Report data
+							${reportData }
 						</div>  						   
 					</c:when>
 					
@@ -236,10 +239,11 @@
 						
 						<div class=col-mid-2">
 							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
-						</div>		
+						</div>	
+						<div class="clearfix"></div>		
 						<hr> 
 						<div class="report-data">
-							User Activity Report data
+							${reportData }
 						</div>    	       
 					</c:otherwise> 
 				</c:choose> 

@@ -23,6 +23,10 @@ public class HomeController {
 		
 		model.addAttribute("title", title);
 		model.addAttribute("reportType", reportType);
+
+		// now we call the class for this report and process what to return
+		String reportData = "Data from KanbanWorkflowWarnings model";
+		model.addAttribute("reportData", reportData);		
 		
 		return "home";
 	}
@@ -34,6 +38,10 @@ public class HomeController {
 		
 		model.addAttribute("title", title);
 		model.addAttribute("reportType", reportType);
+
+		// now we call the class for this report and process what to return
+		String reportData = "Data from KanbanActivityReport model";
+		model.addAttribute("reportData", reportData);
 		
 		return "home";
 	}	
@@ -46,6 +54,9 @@ public class HomeController {
 		model.addAttribute("title", title);
 		model.addAttribute("reportType", reportType);
 		
+		// now we call the class for this report and process what to return
+		String reportData = "Data from UserActivityReport model";
+		model.addAttribute("reportData", reportData);
 		return "home";
 	}
 	
