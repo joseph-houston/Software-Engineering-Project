@@ -19,12 +19,50 @@
 	<link href="<c:url value="/resources/vendor/bootstrap-datepicker/css/datepicker.css" />" rel="stylesheet"  type="text/css" />
 	
 	<script type="text/javascript">
+		var CBWebApp = {}; // We gonna store our app data here
+		
 	    $(document).ready(function () {
+	    	// Kanban-workflow-warnings
+			CBWebApp.productName = null;
+			CBWebApp.productValue = null;	    	
+	    	
+	    	// We need to disable 'Schedule Email and Export PDF' buttons since
+	    	// we don't know which product we are working with
+	    	$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",true);
+	    	$("#schedule-email").prop("disabled",true);
+	    	
+			$( "#product" ).change(function() {
+				CBWebApp.productName = $( "#product option:selected" ).text();
+				CBWebApp.productValue = $( this ).val();
+				
+				//alert( "Handler for .change() called." + CBWebApp.productName + ": " + CBWebApp.productValue );
+				// get the product name and store it to our global
+				
+				if ( CBWebApp.productName !=  null  && CBWebApp.productName != "Select Product") {
+					// Now enable our buttons since we have a product
+					$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",false);
+					$("#schedule-email").prop("disabled",false);
+				} else {
+			    	$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",true);
+			    	$("#schedule-email").prop("disabled",true);					
+				}
+			});	    	
+	    	
+	    	
+	    	
+	    	// Proces modal for email scheduling
+	    	$(".enter-email").click(function(event){
+	    		event.preventDefault();
+	    		$("#enter-email").modal('show');
+	    	});	   
+	    	
+	    	
+	    	
 	    	$('.select-themes').multiselect({
 	    		//enableFiltering: true,
 	    		includeSelectAllOption: true,
 	            nonSelectedText: 'Select Themes',
-	            buttonWidth: '160px',
+	            buttonWidth: '140px',
 	            disableIfEmpty: true,
 	            maxHeight: 150,
 	            nSelectedText: 'themes selected'
@@ -36,9 +74,7 @@
 	    		autoclose: true
 	    	});
 	    	
-	    	$(".enter-email").click(function(){
-	    		$("#enter-email").modal('show');
-	    	});	    	
+ 	
 	    	
 	    });
 
@@ -83,63 +119,65 @@
         <div class="col-md-10 col-md-offset-2 main">
 	        <div class="row controls">
 		       <c:choose>
-					<c:when test="${reportType == 'kanban-workflow-warnings'}">
-					 	<div class="col-md-10">
-							<form class="form-inline pull-right" role="form">
+					<c:when test="${reportType == 'kanban-workflow-warnings'}">				
+					 	<div class="col-md-12">
+							<form id="kanban-workflow-warnings" class="form-inline pull-right" role="form">
 								<div class="form-group">
-									<select  class="form-control" >
-										<option>Select Product</option>
-										<option>Product1</option>
-										<option>Product2</option>
-										<option>Product3</option>
+									<select id="product" class="form-control" >
+										<option value="0">Select Product</option>
+										<option value="1">Product1</option>
+										<option value="3">Product2</option>
+										<option value="3">Product3</option>
 									</select>
 								</div>
 								
-								
-							    <a href="#" class="btn btn-default enter-email">Schedule Email</a>
+								<div class="form-group custom-group">
+									<button id="schedule-email" href="#" class="btn btn-default enter-email">Schedule Email</button>
+								</div>
 							    
-							    <!-- Modal HTML -->
-							    <div id="enter-email" class="modal fade">
-							        <div class="modal-dialog">
-							            <div class="modal-content">
-							                <div class="modal-header">
-							                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							                    <h4 class="modal-title">Schedule Emails For This Report</h4>
-							                </div>
-							                <div class="modal-body">
-							                    <p>Enter your email to receive a nightly email of this report.</p>
-							                    <form id="schedule-email-form" method="get">
-							                    	 <div class="form-group">
-													    <div class="input-group">
-													      <div class="input-group-addon">Email </div>
-													      <input class="form-control" type="email" placeholder="Enter email">
-													    </div>
-													  </div>							                    
-							                    </form>
-							                </div>
-							                <div class="modal-footer">
-							                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							                    <button type="button" class="btn btn-success">Schedule Email</button>
-							                </div>
-							            </div>
-							        </div>
-							    </div>								
-													  			  					  
-							</form>	
+							    <div class="form-group custom-group">
+							    	<button id="kanban-workflow-warnings-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    </div>											  			  					  
+							</form>
+							
+						    <!-- Modal HTML -->
+						    <div id="enter-email" class="modal fade">
+						        <div class="modal-dialog">
+						            <div class="modal-content">
+						                <div class="modal-header">
+						                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						                    <h4 class="modal-title">Schedule Emails For This Report</h4>
+						                </div>
+						                <div class="modal-body">
+						                    <p>Enter your email to receive a nightly email of this report.</p>
+						                    <form id="schedule-email-form" method="get">
+						                    	 <div class="form-group">
+												    <div class="input-group">
+												      <div class="input-group-addon">Email </div>
+												      <input class="form-control" type="email" placeholder="Enter email">
+												    </div>
+												  </div>							                    
+						                    </form>
+						                </div>
+						                <div class="modal-footer">
+						                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						                    <button type="button" class="btn btn-success">Schedule Email</button>
+						                </div>
+						            </div>
+						        </div>
+						    </div>						
 					 	</div>
-						<div class=col-mid-2">
-							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
-						</div>
 						<div class="clearfix"></div>	
 						<hr> 
 						<div class="report-data">
 							${reportData }
 						</div>  
+
 					</c:when>
 					
 					<c:when test="${reportType == 'kanban-activity-report'}">
-						<div class="col-md-10">
-							<form class="form-inline pull-right" role="form">
+						<div class="col-md-12">
+							<form id="kanban-activity-report" class="form-inline pull-right" role="form">
 								<div class="form-group">
 									<select  class="form-control" >
 										<option>Select Product</option>
@@ -165,7 +203,7 @@
 									</label>
 								</div>
 								  					  
-								<div class="form-group">
+								<div class="form-group custom-group">
 									<div class="input-group small-control date" id="datepicker">
 										<span class="input-group-addon">Start Date</span>
 									    <input type="text" class="small-control form-control" name="start" placeholder="mm/dd/yyyy" />
@@ -173,18 +211,20 @@
 									</div>
 								</div>	
 								
-								<div class="form-group">
+								<div class="form-group custom-group">
 									<div class="input-group date" id="datepicker">
 									    <span class="input-group-addon">End Date</span>
 									    <input type="text" class="small-control form-control" name="end" placeholder="mm/dd/yyyy"/>
 									    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 									</div>									
 								</div>	
+							
+							    <div class="form-group custom-group">
+							    	<button id="kanban-activity-report-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    </div>										
 							</form>		    		
 						</div>
-						<div class=col-mid-2">
-							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
-						</div>	
+
 						<div class="clearfix"></div>	
 						<hr> 
 						<div class="report-data">
@@ -193,7 +233,7 @@
 					</c:when>
 					
 					<c:otherwise>
-						<div class="col-md-10">
+						<div class="col-md-12">
 							<form class="form-inline pull-right" role="form">
 								<div class="form-group">
 									<select  class="form-control" >
@@ -218,7 +258,7 @@
 									<input type="checkbox"> Include Details
 									</label>
 								</div>
-								<div class="form-group">
+								<div class="form-group custom-group">
 									<div class="input-group date" id="datepicker">
 										<span class="input-group-addon">Start Date</span>
 									    <input type="text" class="small-control form-control" name="start" placeholder="mm/dd/yyyy" />
@@ -226,20 +266,19 @@
 									</div>
 								</div>	
 								
-								<div class="form-group">
+								<div class="form-group custom-group">
 									<div class="input-group date" id="datepicker">
 									    <span class="input-group-addon">End Date</span>
 									    <input type="text" class="small-control form-control" name="end" placeholder="mm/dd/yyyy"/>
 									    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 									</div>									
 								</div>		
-		
+								
+							    <div class="form-group custom-group">
+							    	<button id="kanban-activity-report-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    </div>					
 							</form>		    		
 						</div>
-						
-						<div class=col-mid-2">
-							<a class="btn btn-default" href="<c:url value="" />">Export PDF</a>
-						</div>	
 						<div class="clearfix"></div>		
 						<hr> 
 						<div class="report-data">
