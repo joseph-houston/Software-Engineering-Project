@@ -1,5 +1,10 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ page session="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,69 +23,110 @@
 	<script src="<c:url value="/resources/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js" />"></script>
 	<link href="<c:url value="/resources/vendor/bootstrap-datepicker/css/datepicker.css" />" rel="stylesheet"  type="text/css" />
 	
-	<script type="text/javascript">
-		var CBWebApp = {}; // We gonna store our app data here
+	<!-- Include our application  -->
+	<script src="<c:url value="/resources/js/CBWebApp.js" />"></script>		
 		
-	    $(document).ready(function () {
-	    	// Kanban-workflow-warnings
-			CBWebApp.productName = null;
-			CBWebApp.productValue = null;	    	
-	    	
-	    	// We need to disable 'Schedule Email and Export PDF' buttons since
-	    	// we don't know which product we are working with
-	    	$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",true);
-	    	$("#schedule-email").prop("disabled",true);
-	    	
-			$( "#product" ).change(function() {
-				CBWebApp.productName = $( "#product option:selected" ).text();
-				CBWebApp.productValue = $( this ).val();
-				
-				//alert( "Handler for .change() called." + CBWebApp.productName + ": " + CBWebApp.productValue );
-				// get the product name and store it to our global
-				
-				if ( CBWebApp.productName !=  null  && CBWebApp.productName != "Select Product") {
-					// Now enable our buttons since we have a product
-					$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",false);
-					$("#schedule-email").prop("disabled",false);
-				} else {
-			    	$("#kanban-workflow-warnings-export-pdf-btn").prop("disabled",true);
-			    	$("#schedule-email").prop("disabled",true);					
-				}
-			});	    	
-	    	
-	    	
-	    	
-	    	// Proces modal for email scheduling
-	    	$(".enter-email").click(function(event){
-	    		event.preventDefault();
-	    		$("#enter-email").modal('show');
-	    	});	   
-	    	
-	    	
-	    	
-	    	$('.select-themes').multiselect({
-	    		//enableFiltering: true,
-	    		includeSelectAllOption: true,
-	            nonSelectedText: 'Select Themes',
-	            buttonWidth: '140px',
-	            disableIfEmpty: true,
-	            maxHeight: 150,
-	            nSelectedText: 'themes selected'
-	        });
-	    	
-	    	$('.input-group.date').datepicker({
-	    		clearBtn: true,
-	    		orientation: "top",
-	    		autoclose: true
-	    	});
-	    	
- 	
-	    	
-	    });
 
+	<c:url var="findThemesForProductUrl" value="/themes" />
+	<c:url var="findUsersForProductUrl" value="/users" />
+	<c:url var="findProductsURL" value="/products" />		
+				
+	<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#products').change(
+				function() {
+					$.getJSON('${findThemesForProductUrl }', {
+						productName : $(this).val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '';
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].name + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
 	
+						$('#karThemes').html(html);
+					}).complete(function(){
+						$('.select-themes').multiselect('rebuild') 
+					});
+					
+				});
+		
+	});
+	</script>		
+	
+	<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#products').change(
+				function() {
+					$.getJSON('${findUsersForProductUrl }', {
+						productName : $(this).val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="">Select User</option>';
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].name + '">'
+									+ data[i].name + '</option>';
+						}
+						html += '</option>';
+	
+						$('#karUsers').html(html);
+					});
+					
+				});
+		
+	});
+	</script>		
+	
+	<script type="text/javascript">
+	$(document).ready(
+			function() {
+				$.getJSON('${findProductsURL }', {
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="">Select Product</option>';
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].name + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+			        //now that we have our options, give them to our select
+					$('#products').html(html);
+					              
+				}).complete(function(){
+					$('.select-themes').multiselect({
+						//enableFiltering: true,
+						includeSelectAllOption: true,
+				        nonSelectedText: 'Select Themes',
+				        buttonWidth: '140px',
+				        disableIfEmpty: true,
+				        maxHeight: 150,
+				        nSelectedText: 'themes selected'
+				    });		
+				});
+				
+			});	
 	</script>
 	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#city").change(onSelectChange);
+		});
+	
+		function onSelectChange() {
+			var selected = $("#city option:selected");		
+			var output = "";
+			if(selected.val() != 0){
+				output = "You selected Themes: " + selected.text();
+			}
+			$("#output").html(output);
+			
+		}
+	</script>	
 	
 </head>
 <body>
@@ -123,20 +169,17 @@
 					 	<div class="col-md-12">
 							<form id="kanban-workflow-warnings" class="form-inline pull-right" role="form">
 								<div class="form-group">
-									<select id="product" class="form-control" >
-										<option value="0">Select Product</option>
-										<option value="1">Product1</option>
-										<option value="3">Product2</option>
-										<option value="3">Product3</option>
+									<select id="products" class="form-control" >
 									</select>
-								</div>
+ 								</div>
+							
 								
 								<div class="form-group custom-group">
 									<button id="schedule-email" href="#" class="btn btn-default enter-email">Schedule Email</button>
 								</div>
 							    
 							    <div class="form-group custom-group">
-							    	<button id="kanban-workflow-warnings-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    	<a href="<c:url value="/kanbanWorkflowWarnings.pdf" />" target="_blank" id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</a>	
 							    </div>											  			  					  
 							</form>
 							
@@ -171,42 +214,42 @@
 						<hr> 
 						<div class="report-data">
 							${reportData }
+							<div id="data">
+								
+							</div>
 						</div>  
-
+						
+						<script type="text/javascript">
+							$(document).ready(function () {
+								CBWebApp.init();
+								CBWebApp.processKanbanWorkflowWarnings();
+							});						
+						</script>
 					</c:when>
 					
 					<c:when test="${reportType == 'kanban-activity-report'}">
 						<div class="col-md-12">
 							<form id="kanban-activity-report" class="form-inline pull-right" role="form">
 								<div class="form-group">
-									<select  class="form-control" >
-										<option>Select Product</option>
-										<option>Product1</option>
-										<option>Product2</option>
-										<option>Product3</option>
+									<select id="products" class="form-control" >
 									</select>
 								</div>					  
 
-								<div class="form-group">
-									<select multiple="multiple" placeholder="Select Themes" class="form-control select-themes" >
-										<option value="1">Theme 1</option>
-										<option value="2">Theme 2</option>
-										<option value="3">Theme 3</option>
-										<option value="4">Theme 4</option>
-										<option value="5">Theme 5</option>										
+								<div id="themes" class="form-group">
+									<select id="karThemes" multiple="multiple" placeholder="Select Themes" class="form-control select-themes" >							
 									</select>								
 								</div>
 						  					  
 								<div class="checkbox">
 									<label>
-									<input type="checkbox"> Include History
+									<input id="includeHistory" type="checkbox"> Include History
 									</label>
 								</div>
 								  					  
 								<div class="form-group custom-group">
-									<div class="input-group small-control date" id="datepicker">
+									<div class="input-group date" id="datepicker">
 										<span class="input-group-addon">Start Date</span>
-									    <input type="text" class="small-control form-control" name="start" placeholder="mm/dd/yyyy" />
+									    <input id="startDate" type="text" class="small-control form-control" name="start" placeholder="mm/dd/yyyy" />
 									    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 									</div>
 								</div>	
@@ -214,13 +257,13 @@
 								<div class="form-group custom-group">
 									<div class="input-group date" id="datepicker">
 									    <span class="input-group-addon">End Date</span>
-									    <input type="text" class="small-control form-control" name="end" placeholder="mm/dd/yyyy"/>
+									    <input id="endDate" type="text" class="small-control form-control" name="end" placeholder="mm/dd/yyyy"/>
 									    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 									</div>									
 								</div>	
 							
 							    <div class="form-group custom-group">
-							    	<button id="kanban-activity-report-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    	<button id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
 							    </div>										
 							</form>		    		
 						</div>
@@ -229,27 +272,63 @@
 						<hr> 
 						<div class="report-data">
 							${reportData }
-						</div>  						   
+
+						
+						<script type="text/javascript">
+							$(document).ready(function () {
+								CBWebApp.init();
+								CBWebApp.processKanbanActivityReport();
+								$( "#karProduct" ).change(function(e) {
+									// Get our product name and store it to our global
+									CBWebApp.data.productName = $( "#karProduct option:selected" ).text();
+									CBWebApp.data.productValue = $( this ).val();
+									//CBWebApp.showData();
+									
+									if ( CBWebApp.data.productName !=  null  && CBWebApp.data.productName != "Select Product") {
+										// Now enable our buttons since we have a product
+										$("#export-pdf-btn").prop("disabled",false);
+										
+										// Auto submit our form to get the report 
+										$.ajax({
+										    type:"POST",
+										    data:CBWebApp.data,
+										    url:"<c:url value="/kanbanActivityReport" />",
+										    async: false,
+										    //dataType: "json",
+										    success: function(response){
+										       //alert("success");
+										       //$("#data").html(response);
+										       var o = new Option(response);
+												/// jquerify the DOM object 'o' so we can use the html method
+												$(o).html("option text");
+										       $("#karThemes").append(o);
+										       alert(new Option(response));
+										    },
+										    error: function(e){
+										    	alert("Error: " + e);
+										    }
+										});					
+										
+									} else {
+								    	$("#export-pdf-btn").prop("disabled",true);				
+									}
+									e.preventDefault();
+								});																	
+							});					
+						</script>								   
 					</c:when>
 					
 					<c:otherwise>
 						<div class="col-md-12">
 							<form class="form-inline pull-right" role="form">
 								<div class="form-group">
-									<select  class="form-control" >
-										<option>Select Product</option>
-										<option>Product1</option>
-										<option>Product2</option>
-										<option>Product3</option>
+									<select id='products'  class="form-control" >
 									</select>
 								</div>
 								  
 								<div class="form-group">
-									<select  class="form-control" >
-										<option>Select User</option>
-										<option>User 1</option>
-										<option>USer 2</option>
-										<option>User 3</option>
+									<select id='karUsers' placeholder="Select Users" class="form-control" >
+										<option value="">Select User</option>
 									</select>
 								</div>
 								  					  
@@ -275,7 +354,7 @@
 								</div>		
 								
 							    <div class="form-group custom-group">
-							    	<button id="kanban-activity-report-export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
+							    	<button id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
 							    </div>					
 							</form>		    		
 						</div>
@@ -283,7 +362,15 @@
 						<hr> 
 						<div class="report-data">
 							${reportData }
-						</div>    	       
+						</div> 
+						
+						<script type="text/javascript"> 
+							$(document).ready(function () {
+								CBWebApp.init();
+								CBWebApp.processKanbanUserActivity();
+															
+							});
+						</script>						   	       
 					</c:otherwise> 
 				</c:choose> 
 				           
