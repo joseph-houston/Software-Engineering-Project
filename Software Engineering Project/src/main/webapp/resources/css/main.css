@@ -113,8 +113,8 @@ a {
 .form-inline .input-group>.form-control {
 	margin-right: 0;
 }
-.form-control, .checkbox, .btn-group{
-	margin-right: 20px;
+.form-control, .checkbox, .btn-group, .custom-group{
+	margin-right: 10px;
 }
 .controls{
 	margin-top: 10px;
