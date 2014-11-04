@@ -23,6 +23,10 @@
 	
 	<context:component-scan base-package="com.cs4910.CBWebApp" />
 	
-	
+	<!-- We need this to display our reports on the page as a pdf. -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		 <beans:property name="order" value="1"></beans:property>
+		 <beans:property name="basename" value="views"></beans:property>
+	</beans:bean>	
 	
 </beans:beans>
