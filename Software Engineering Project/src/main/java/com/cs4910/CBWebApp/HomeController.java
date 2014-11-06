@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import com.cs4910.CBWebApp.Models.API2SoapClient;
+
 
 /**
  * Handles requests for the application home page.
@@ -24,6 +26,9 @@ public class HomeController {
 	public String home( Model model) {
 		String title = "Kanban Workflow Warnings";
 		String reportType = "kanban-workflow-warnings";
+		
+		//test for API2SoapClient
+		API2SoapClient.main();
 		
 		model.addAttribute("title", title);
 		model.addAttribute("reportType", reportType);
