@@ -35,12 +35,7 @@ public class API2SoapClient {
 	
 	protected void initialize() {
 		try {
-			setUrl(new URL(DEFAULT_URL));
-			setEndpoint(locator.getScrumWorksEndpointPort(url));
-			((ScrumWorksEndpointBindingStub) getEndpoint())
-					.setUsername(DEFAULT_USER);
-			((ScrumWorksEndpointBindingStub) getEndpoint())
-					.setPassword(DEFAULT_PWD);
+			setAPIservice(ScrumWorksService.getConnection(DEFAULT_URL, DEFAULT_USER, DEFAULT_PWD));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -53,14 +48,6 @@ public class API2SoapClient {
 
 	public void setAPIservice(ScrumWorksAPIService apiService) {
 		this.apiService = apiService;
-	}
-
-	public URL getUrl() {
-		return url;
-	}
-
-	public void setUrl(URL url) {
-		this.url = url;
 	}
 	
 }
