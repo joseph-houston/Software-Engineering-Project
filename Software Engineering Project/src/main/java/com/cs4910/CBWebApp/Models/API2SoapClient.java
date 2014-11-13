@@ -20,7 +20,7 @@ public class API2SoapClient {
 	
 	protected ScrumWorksAPIService apiService;
 	
-	protected static String DEFAULT_URL = "http://localhost:8080/scrumworks-api/api2/scrumworks";
+	protected static String DEFAULT_URL = "http://localhost:8080/scrumworks/login";
 	
 	protected static String DEFAULT_USER = "administrator";
 
@@ -42,10 +42,10 @@ public class API2SoapClient {
 	public static void main() {
 		try {
 			API2SoapClient client = new API2SoapClient();
-			//Product product = null;
-			//product = client.getProduct();
-			//System.out.println("Testing client");
-			//System.out.println(product.toString());
+			Product product = null;
+			product = client.getProduct();
+			System.out.println("Testing client");
+			System.out.println(product.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

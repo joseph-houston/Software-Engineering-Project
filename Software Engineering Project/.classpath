@@ -25,6 +25,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ScrumWorks"/>
+	<classpathentry exported="true" kind="lib" path="/Users/josephhouston/Desktop/Software-Engineering-Project/Software Engineering Project/ScrumWorks-soap.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
