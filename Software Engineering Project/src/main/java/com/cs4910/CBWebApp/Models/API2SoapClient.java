@@ -47,7 +47,7 @@ public class API2SoapClient {
 			List<Product> products = new ArrayList<Product>();
 			products = service.getProducts();
 			System.out.println("Testing client");
-			System.out.println(products.toString());
+			System.out.println(products.get(1).toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

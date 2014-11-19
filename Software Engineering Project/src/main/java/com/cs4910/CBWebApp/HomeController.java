@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.cs4910.CBWebApp.Models.API2SoapClient;
+import com.cs4910.CBWebApp.Models.PopulateProduct;
 
 
 /**
@@ -28,7 +29,8 @@ public class HomeController {
 		String reportType = "kanban-workflow-warnings";
 		
 		//test for API2SoapClient
-		API2SoapClient.main();
+		//API2SoapClient.main();
+		PopulateProduct.main();
 		
 		model.addAttribute("title", title);
 		model.addAttribute("reportType", reportType);
