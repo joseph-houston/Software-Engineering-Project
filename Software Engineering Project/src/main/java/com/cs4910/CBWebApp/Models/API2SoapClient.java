@@ -3,8 +3,6 @@ package com.cs4910.CBWebApp.Models;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.danube.scrumworks.api2.ScrumWorksService;
