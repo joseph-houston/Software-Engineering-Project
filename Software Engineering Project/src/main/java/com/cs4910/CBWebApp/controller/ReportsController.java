@@ -21,6 +21,7 @@ import com.cs4910.CBWebApp.service.ProductService;
 public class ReportsController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportsController.class);
 	
+	
 	@Inject 
 	private ProductService productService;
 	
