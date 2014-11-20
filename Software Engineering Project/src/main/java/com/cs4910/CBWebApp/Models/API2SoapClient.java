@@ -3,8 +3,6 @@ package com.cs4910.CBWebApp.Models;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.danube.scrumworks.api2.ScrumWorksService;
@@ -47,7 +45,7 @@ public class API2SoapClient {
 			List<Product> products = new ArrayList<Product>();
 			products = service.getProducts();
 			System.out.println("Testing client");
-			System.out.println(products.toString());
+			System.out.println(products.get(1).toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
