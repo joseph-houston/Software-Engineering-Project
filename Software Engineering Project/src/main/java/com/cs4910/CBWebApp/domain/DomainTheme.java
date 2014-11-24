@@ -1,17 +1,17 @@
 package com.cs4910.CBWebApp.domain;
 
-public class Theme implements Comparable<Theme> {
+public class DomainTheme implements Comparable<DomainTheme> {
 	private long id;
 	private String name;
 	private DomainProduct product;
 	
-	public Theme() {
+	public DomainTheme() {
 		this.name = "unknown";
 		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}
 
-	public Theme(String name) {
+	public DomainTheme(String name) {
 		this.name = name;
 		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
@@ -54,7 +54,7 @@ public class Theme implements Comparable<Theme> {
 
 
 	@Override
-	public int compareTo(Theme o) {
+	public int compareTo(DomainTheme o) {
 		return this.name.compareTo(o.name);
 	}
 
@@ -75,7 +75,7 @@ public class Theme implements Comparable<Theme> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Theme other = (Theme) obj;
+		DomainTheme other = (DomainTheme) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

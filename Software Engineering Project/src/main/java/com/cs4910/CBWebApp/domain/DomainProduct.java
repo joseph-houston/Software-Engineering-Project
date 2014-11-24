@@ -9,8 +9,8 @@ import java.util.TreeSet;
 public class DomainProduct implements Comparable<DomainProduct> {
 	private Long id;
 	private String name;
-	private Set<Theme> themes = new TreeSet<Theme>();
-	private Set<User> users = new TreeSet<User>();
+	private Set<DomainTheme> themes = new TreeSet<DomainTheme>();
+	private Set<DomainUser> users = new TreeSet<DomainUser>();
 	
 	public DomainProduct() {
 		super();
@@ -24,26 +24,26 @@ public class DomainProduct implements Comparable<DomainProduct> {
 		this.name = name;
 	}
 	
-	public DomainProduct addTheme(Theme theme){
+	public DomainProduct addTheme(DomainTheme theme){
 		this.themes.add(theme);
 		theme.setProduct(this);		
 		return this;
 	}
 	
 	public DomainProduct addTheme(String name){
-		Theme theme = new Theme(name);
+		DomainTheme theme = new DomainTheme(name);
 		this.themes.add(theme);
 		return this;
 	}
 	
-	public DomainProduct addUser(User user){
+	public DomainProduct addUser(DomainUser user){
 		this.users.add(user);
 		user.setProduct(this);
 		return this;
 	}
 	
 	public DomainProduct addUser(String name){
-		User user = new User(name);
+		DomainUser user = new DomainUser(name);
 		this.users.add(user);
 		return this;
 	}
@@ -68,13 +68,13 @@ public class DomainProduct implements Comparable<DomainProduct> {
 	}
 
 
-	public Set<Theme> getThemes() {
+	public Set<DomainTheme> getThemes() {
 		return Collections.unmodifiableSet(this.themes);
 	}
 
-	public Theme getTheme(String name) {
-		Theme result = null;
-		for (Theme t : this.themes) {
+	public DomainTheme getTheme(String name) {
+		DomainTheme result = null;
+		for (DomainTheme t : this.themes) {
 			if (t.getName().equals(name)) {
 				return t;
 			}
@@ -82,18 +82,18 @@ public class DomainProduct implements Comparable<DomainProduct> {
 		return result;
 	}	
 
-	public void setThemes(Set<Theme> themes) {
+	public void setThemes(Set<DomainTheme> themes) {
 		this.themes = themes;
 	}
 
 
-	public Set<User> getUsers() {
+	public Set<DomainUser> getUsers() {
 		return Collections.unmodifiableSet(this.users);
 	}
 
-	public User getUser(String name) {
-		User result = null;
-		for (User u : this.users) {
+	public DomainUser getUser(String name) {
+		DomainUser result = null;
+		for (DomainUser u : this.users) {
 			if (u.getName().equals(name)) {
 				return u;
 			}
@@ -101,7 +101,7 @@ public class DomainProduct implements Comparable<DomainProduct> {
 		return result;
 	}	
 	
-	public void setUsers(Set<User> users) {
+	public void setUsers(Set<DomainUser> users) {
 		this.users = users;
 	}
 

@@ -1,17 +1,17 @@
 package com.cs4910.CBWebApp.domain;
 
-public class User implements Comparable<User> {
+public class DomainUser implements Comparable<DomainUser> {
 	private long id;
 	private String name;
 	private DomainProduct product;
 	
-	public User() {
+	public DomainUser() {
 		this.name = "unknown";
 		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}
 
-	public User(String name) {
+	public DomainUser(String name) {
 		this.name = name;
 		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
@@ -53,7 +53,7 @@ public class User implements Comparable<User> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		DomainUser other = (DomainUser) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -74,7 +74,7 @@ public class User implements Comparable<User> {
 	}
 
 	@Override
-	public int compareTo(User o) {
+	public int compareTo(DomainUser o) {
 		return this.name.compareTo(o.name);
 	}
 

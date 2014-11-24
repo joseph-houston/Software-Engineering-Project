@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cs4910.CBWebApp.domain.Employee;
+import com.cs4910.CBWebApp.domain.DomainEmployee;
 
 @Controller
 public class PdfController {
@@ -17,7 +17,7 @@ public class PdfController {
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
 		  
-		  Employee employee = new Employee();
+		  DomainEmployee employee = new DomainEmployee();
 		  employee.setFirstName("George");
 		  employee.setLastName("Gathee");
 		  
@@ -31,7 +31,7 @@ public class PdfController {
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
 		  
-		  Employee employee = new Employee();
+		  DomainEmployee employee = new DomainEmployee();
 		  employee.setFirstName("George");
 		  employee.setLastName("Gathee");
 		  
@@ -45,7 +45,7 @@ public class PdfController {
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
 		  
-		  Employee employee = new Employee();
+		  DomainEmployee employee = new DomainEmployee();
 		  employee.setFirstName("George");
 		  employee.setLastName("Gathee");
 		  

@@ -12,63 +12,79 @@ import java.util.TreeSet;
 import org.springframework.stereotype.Service;
 
 import com.cs4910.CBWebApp.domain.DomainProduct;
-import com.cs4910.CBWebApp.domain.Theme;
-import com.cs4910.CBWebApp.domain.User;
+import com.cs4910.CBWebApp.domain.DomainTheme;
+import com.cs4910.CBWebApp.domain.DomainUser;
 import com.cs4910.CBWebApp.Models.*;
-import com.danube.scrumworks.api2.client.Product;
+import com.danube.scrumworks.api2.client.*;
 
 public class DefaultProductService implements ProductService {
 	private Map<String, DomainProduct> products = new LinkedHashMap<String, DomainProduct>();
 	
 	//default will be all products
-	public DefaultProductService() {
+	public DefaultProductService(){
 		super();
 		PopulateProducts allProducts = new PopulateProducts();
+		PopulateUsers users = new PopulateUsers();
+		PopulateThemes themes = new PopulateThemes();
 		List<Product> listProducts = allProducts.getAllProducts();
 
-		int i = 0;
+		for(int i = 0; i < listProducts.size(); i++){
 		
-		Product product = listProducts.get(i);
-		DomainProduct domainProd = new DomainProduct(product.getName());
-		domainProd.addUser("product1 user1").addUser("product1 user2").addUser("product1 user3");
-		domainProd.addTheme("product1 theme1").addTheme("product1 theme2").addTheme("product1 theme3").addTheme("product1 theme4");
-		this.products.put(domainProd.getName(), domainProd);
-		
-//		product = new DomainProduct("product 2");
-//		product.addUser("product2 user1").addUser("product2 user2").addUser("product2 user3");
-//		product.addTheme("product2 theme1").addTheme("product2 theme2").addTheme("product2 theme2");
-//		this.products.put(product.getName(), product);
-//		
-//		product = new DomainProduct("product 3");
-//		product.addUser("product3 user1");
-//		product.addTheme("product3 theme1");
-//		this.products.put(product.getName(), product);
-//		
-//		product = new DomainProduct("product 4");
-//		product.addUser("product4 user1");
-//		this.products.put(product.getName(), product);
-//		
-//		product = new DomainProduct("product 5");
-//		product.addTheme("product5 theme1");
-//		this.products.put(product.getName(), product);
-//		
-//		product = new DomainProduct("product 6");
-//		this.products.put(product.getName(), product);
+			Product product = listProducts.get(i);
+			DomainProduct domainProd = new DomainProduct(product.getName());
+			List<User> productUsers = users.getUsers(product);
+			List<Theme> productThemes;
+			try {
+				productThemes = themes.getThemes(product);
+			
+			
+				for(int j = 0; j<productUsers.size(); j++){
+					domainProd.addUser(productUsers.get(j).getName());
+				}
+			
+				for(int k = 0; k<productThemes.size(); k++){
+					domainProd.addTheme(productThemes.get(k).getName());
+				}
+
+				this.products.put(domainProd.getName(), domainProd);
+			
+			} catch (ScrumWorksException e) {
+				e.printStackTrace();
+			}
+		}
 	}	
 	
 	//default will be all kanban products
-		public DefaultProductService(boolean kanban) {
+		public DefaultProductService(boolean kanban){
 			super();
 			PopulateProducts allProducts = new PopulateProducts();
+			PopulateUsers users = new PopulateUsers();
+			PopulateThemes themes = new PopulateThemes();
 			List<Product> listProducts = allProducts.getAllProducts();
 
-			int i = 0;
-			
-			Product product = listProducts.get(i);
-			DomainProduct domainProd = new DomainProduct(product.getName());
-			domainProd.addUser("product1 user1").addUser("product1 user2").addUser("product1 user3");
-			domainProd.addTheme("product1 theme1").addTheme("product1 theme2").addTheme("product1 theme3").addTheme("product1 theme4");
-			this.products.put(domainProd.getName(), domainProd);
+			for(int i = 0; i < listProducts.size(); i++){
+				
+				Product product = listProducts.get(i);
+				DomainProduct domainProd = new DomainProduct(product.getName());
+				List<User> productUsers = users.getUsers(product);
+				List<Theme> productThemes;
+				try {
+					productThemes = themes.getThemes(product);
+				
+				
+					for(int j = 0; j<productUsers.size(); j++){
+						domainProd.addUser(productUsers.get(j).getName());
+					}
+				
+					for(int k = 0; k<productThemes.size(); k++){
+					domainProd.addTheme(productThemes.get(k).getName());
+					}
+
+					this.products.put(domainProd.getName(), domainProd);
+				} catch (ScrumWorksException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	@Override
@@ -86,13 +102,13 @@ public class DefaultProductService implements ProductService {
 	}
 
 	@Override
-	public Set<User> findAllUsersForProduct(String productName) {
+	public Set<DomainUser> findAllUsersForProduct(String productName) {
 		DomainProduct product = this.products.get(productName);
 		return product.getUsers();
 	}
 
 	@Override
-	public Set<Theme> findAllThemesForProduct(String productName) {
+	public Set<DomainTheme> findAllThemesForProduct(String productName) {
 		DomainProduct product = this.products.get(productName);
 		return product.getThemes();
 	}

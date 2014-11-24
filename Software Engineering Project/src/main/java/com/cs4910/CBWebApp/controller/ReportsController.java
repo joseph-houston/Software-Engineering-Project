@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cs4910.CBWebApp.domain.DomainProduct;
-import com.cs4910.CBWebApp.domain.Theme;
-import com.cs4910.CBWebApp.domain.User;
+import com.cs4910.CBWebApp.domain.DomainTheme;
+import com.cs4910.CBWebApp.domain.DomainUser;
 import com.cs4910.CBWebApp.service.DefaultProductService;
 
 @Controller
@@ -27,7 +27,7 @@ public class ReportsController {
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<User> usersForProduct(@RequestParam(value = "productName", required = true) String product) {
+	Set<DomainUser> usersForProduct(@RequestParam(value = "productName", required = true) String product) {
 		logger.debug("finding users for product " + product);
 		System.out.println("n users: " + productService.findAllUsersForProduct(product).size());
 		System.out.println("n themes: " + productService.findAllThemesForProduct(product).size());		
@@ -36,7 +36,7 @@ public class ReportsController {
 
 	@RequestMapping(value = "/themes", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Theme> themesForProduct(@RequestParam(value = "productName", required = true) String product) {
+	Set<DomainTheme> themesForProduct(@RequestParam(value = "productName", required = true) String product) {
 		logger.debug("finding themes for product " + product);
 		System.out.println("n users: " + productService.findAllUsersForProduct(product).size());
 		System.out.println("n themes: " + productService.findAllThemesForProduct(product).size());

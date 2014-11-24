@@ -1,6 +1,6 @@
 package com.cs4910.CBWebApp.domain;
 
-public class Employee {
+public class DomainEmployee {
 	private String firstName;
 	private String lastName;
 	
