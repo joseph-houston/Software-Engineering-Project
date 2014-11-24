@@ -69,7 +69,7 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Product> findAllStates() {
+	Set<Product> findAllProducts() {
 		logger.debug("finding all products");
 		return this.productService.findAllProducts();
 	}
