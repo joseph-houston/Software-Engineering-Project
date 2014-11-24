@@ -3,17 +3,17 @@ package com.cs4910.CBWebApp.domain;
 public class Theme implements Comparable<Theme> {
 	private long id;
 	private String name;
-	private Product product;
+	private DomainProduct product;
 	
 	public Theme() {
 		this.name = "unknown";
-		this.product = new Product("unknown");
+		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}
 
 	public Theme(String name) {
 		this.name = name;
-		this.product = new Product("unknown");
+		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}		
 
@@ -41,13 +41,13 @@ public class Theme implements Comparable<Theme> {
 
 
 
-	public Product getProduct() {
+	public DomainProduct getProduct() {
 		return product;
 	}
 
 
 
-	public void setProduct(Product product) {
+	public void setProduct(DomainProduct product) {
 		this.product = product;
 	}
 

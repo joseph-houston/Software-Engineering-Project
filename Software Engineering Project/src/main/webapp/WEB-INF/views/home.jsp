@@ -29,7 +29,8 @@
 
 	<c:url var="findThemesForProductUrl" value="/themes" />
 	<c:url var="findUsersForProductUrl" value="/users" />
-	<c:url var="findProductsURL" value="/products" />		
+	<c:url var="findKanbanProductsURL" value="/kanbanProducts" />		
+	<c:url var="findAllProductsURL" value="/allProducts" />	
 				
 	<script type="text/javascript">
 	$(document).ready(function() { 
@@ -84,7 +85,7 @@
 	<script type="text/javascript">
 	$(document).ready(
 			function() {
-				$.getJSON('${findProductsURL }', {
+				$.getJSON('${findKanbanProductsURL }', {
 					ajax : 'true'
 				}, function(data) {
 					var html = '<option value="">Select Product</option>';

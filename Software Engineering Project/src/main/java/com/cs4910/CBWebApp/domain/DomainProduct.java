@@ -6,43 +6,43 @@ import java.util.TreeSet;
 
 
 
-public class Product implements Comparable<Product> {
+public class DomainProduct implements Comparable<DomainProduct> {
 	private Long id;
 	private String name;
 	private Set<Theme> themes = new TreeSet<Theme>();
 	private Set<User> users = new TreeSet<User>();
 	
-	public Product() {
+	public DomainProduct() {
 		super();
 		this.id = System.currentTimeMillis();
 		this.name = "Unknown Product";
 	}
 	
-	public Product(String name) {
+	public DomainProduct(String name) {
 		super();
 		this.id = System.currentTimeMillis();
 		this.name = name;
 	}
 	
-	public Product addTheme(Theme theme){
+	public DomainProduct addTheme(Theme theme){
 		this.themes.add(theme);
 		theme.setProduct(this);		
 		return this;
 	}
 	
-	public Product addTheme(String name){
+	public DomainProduct addTheme(String name){
 		Theme theme = new Theme(name);
 		this.themes.add(theme);
 		return this;
 	}
 	
-	public Product addUser(User user){
+	public DomainProduct addUser(User user){
 		this.users.add(user);
 		user.setProduct(this);
 		return this;
 	}
 	
-	public Product addUser(String name){
+	public DomainProduct addUser(String name){
 		User user = new User(name);
 		this.users.add(user);
 		return this;
@@ -107,7 +107,7 @@ public class Product implements Comparable<Product> {
 
 
 	@Override
-	public int compareTo(Product o) {
+	public int compareTo(DomainProduct o) {
 		return this.name.compareTo(o.name);
 	}
 
@@ -129,7 +129,7 @@ public class Product implements Comparable<Product> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		DomainProduct other = (DomainProduct) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -3,17 +3,17 @@ package com.cs4910.CBWebApp.domain;
 public class User implements Comparable<User> {
 	private long id;
 	private String name;
-	private Product product;
+	private DomainProduct product;
 	
 	public User() {
 		this.name = "unknown";
-		this.product = new Product("unknown");
+		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}
 
 	public User(String name) {
 		this.name = name;
-		this.product = new Product("unknown");
+		this.product = new DomainProduct("unknown");
 		this.id = System.currentTimeMillis();
 	}	
 	
@@ -29,10 +29,10 @@ public class User implements Comparable<User> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Product getProduct() {
+	public DomainProduct getProduct() {
 		return product;
 	}
-	public void setProduct(Product product) {
+	public void setProduct(DomainProduct product) {
 		this.product = product;
 	}
 

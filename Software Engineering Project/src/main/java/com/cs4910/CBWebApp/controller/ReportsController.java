@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cs4910.CBWebApp.domain.Product;
+import com.cs4910.CBWebApp.domain.DomainProduct;
 import com.cs4910.CBWebApp.domain.Theme;
 import com.cs4910.CBWebApp.domain.User;
-import com.cs4910.CBWebApp.service.ProductService;
+import com.cs4910.CBWebApp.service.DefaultProductService;
 
 @Controller
 public class ReportsController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportsController.class);
+	 
+	private DefaultProductService productService = new DefaultProductService();
 	
-	
-	@Inject 
-	private ProductService productService;
+	private DefaultProductService kanbanProductService = new DefaultProductService(true);
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public @ResponseBody
@@ -43,9 +43,16 @@ public class ReportsController {
 		return this.productService.findAllThemesForProduct(product);
 	}	
 
-	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	@RequestMapping(value = "/kanbanProducts", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Product> findAllStates() {
+	Set<DomainProduct> kanbanProducts() {
+		logger.debug("finding all products");
+		return this.productService.findAllProducts();
+	}	
+	
+	@RequestMapping(value = "/allProducts", method = RequestMethod.GET)
+	public @ResponseBody
+	Set<DomainProduct> allProducts() {
 		logger.debug("finding all products");
 		return this.productService.findAllProducts();
 	}	
