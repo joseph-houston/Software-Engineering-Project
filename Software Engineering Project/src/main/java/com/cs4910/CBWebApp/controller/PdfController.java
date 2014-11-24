@@ -10,9 +10,26 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cs4910.CBWebApp.domain.Employee;
 
+/**
+ * This controller uses class views to render pdf documents. Thes class view are found in 
+ * the view package. 
+ * 
+ * @author Njenga Gathee
+ *
+ */
+
 @Controller
 public class PdfController {
-	 @RequestMapping(value = "/kanbanWorkflowWarnings.pdf", method = RequestMethod.GET)
+	/**
+	 * This will map kanban workflow warnings report. It will require the product name 
+	 * to create the report and display it as a pdf document.
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	 @RequestMapping(value = "/report.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanWorkflowWarningsPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
@@ -26,7 +43,15 @@ public class PdfController {
 		  return modelAndView;
 	 }
 	 
-	 @RequestMapping(value = "/kanbanActivityReport.pdf", method = RequestMethod.GET)
+	 /**
+	  * This will map kanban activity report and will require all the parameters passed by the 
+	  * the report generation form to generate the report and display it as a pdf document. 
+	  * @param request
+	  * @param response
+	  * @return
+	  * @throws Exception
+	  */
+	 @RequestMapping(value = "/kanbanActivityReport/report.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanActivityReportPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
@@ -40,14 +65,23 @@ public class PdfController {
 		  return modelAndView;
 	 }	 
 	 
-	 @RequestMapping(value = "/kanbanUserActivityReport.pdf", method = RequestMethod.GET)
+	 /**
+	  * This will map user activity report and will require all the parameters passed by the 
+	  * report generation form to generate and display the report as a pdf document.
+	  * @param request
+	  * @param response
+	  * @return
+	  * @throws Exception
+	  */
+	 @RequestMapping(value = "/userActivityReport/report.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanUserActivityReportPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
 		  
+		  String testName = request.getParameter("name");
 		  Employee employee = new Employee();
 		  employee.setFirstName("George");
-		  employee.setLastName("Gathee");
+		  employee.setLastName(testName);
 		  
 		  ModelAndView modelAndView = new ModelAndView("kanbanUserActivityReportPdf", "command",employee);
 		  

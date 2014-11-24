@@ -13,7 +13,7 @@ CBWebApp.init = function(){
 	//this.data.endDate = null
 	//this.data.includeDetails = null;
 	//this.data.name = "cbwebapp";
-	this.disablePdfButton();
+	//this.disablePdfButton();
 	//alert(CBWebApp.data.name + CBWebApp.data.common);
 }
 
@@ -22,9 +22,9 @@ CBWebApp.init = function(){
 CBWebApp.processKanbanWorkflowWarnings = function() {
 	// on ready disable schedule email button since 
 	// we don't have a product yet.
-	$('#schedule-email').prop("disabled",true);
+	//$('#schedule-email').prop("disabled",true);
 	
-	$( "#product" ).change(function() {
+	$( "#products" ).change(function() {
 		CBWebApp.data.productName = $( "#product option:selected" ).text();
 		CBWebApp.data.productValue = $( this ).val();
 		CBWebApp.showData();
@@ -50,8 +50,8 @@ CBWebApp.processKanbanWorkflowWarnings = function() {
 			    }
 			});			
 		} else {
-	    	$("#export-pdf-btn").prop("disabled",true);
-	    	$("#schedule-email").prop("disabled",true);					
+	    	//$("#export-pdf-btn").prop("disabled",true);
+	    	//$("#schedule-email").prop("disabled",true);					
 		}
 	});		
 	

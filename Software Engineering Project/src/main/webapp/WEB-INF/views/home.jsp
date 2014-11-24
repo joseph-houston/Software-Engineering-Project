@@ -29,7 +29,8 @@
 
 	<c:url var="findThemesForProductUrl" value="/themes" />
 	<c:url var="findUsersForProductUrl" value="/users" />
-	<c:url var="findProductsURL" value="/products" />		
+	<c:url var="findProductsURL" value="/products" />
+	<c:url var="scheduleEmailUrl" value="/scheduleEmail" />		
 				
 	<script type="text/javascript">
 	$(document).ready(function() { 
@@ -55,7 +56,27 @@
 				});
 		
 	});
+	
+	
 	</script>		
+
+	<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#export-pdf-btn').click(function(){
+			var url = window.location;
+			//alert(url);
+			var lastChar = url[url.length - 1];
+			if(lastChar != "/"){
+				url += "/"
+			}
+			url += "report.pdf";
+			url+="?name=test&id=3";
+			window.open(url);
+		});	
+	});
+	
+	
+	</script>	
 	
 	<script type="text/javascript">
 	$(document).ready(function() { 
@@ -179,7 +200,8 @@
 								</div>
 							    
 							    <div class="form-group custom-group">
-							    	<a href="<c:url value="/kanbanWorkflowWarnings.pdf" />" target="_blank" id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</a>	
+							    	<!-- <a href="<c:url value="/kanbanWorkflowWarnings.pdf" />" target="_blank" id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</a> -->
+							    	<button id="export-pdf-btn" class="btn btn-default>">Export PDF</button>	
 							    </div>											  			  					  
 							</form>
 							
@@ -197,14 +219,14 @@
 						                    	 <div class="form-group">
 												    <div class="input-group">
 												      <div class="input-group-addon">Email </div>
-												      <input class="form-control" type="email" placeholder="Enter email">
+												      <input id="email" class="form-control" type="email" placeholder="Enter email">
 												    </div>
 												  </div>							                    
 						                    </form>
 						                </div>
 						                <div class="modal-footer">
 						                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						                    <button type="button" class="btn btn-success">Schedule Email</button>
+						                    <button type="button" class="btn btn-success" id="schedule">Schedule Email</button>
 						                </div>
 						            </div>
 						        </div>
@@ -223,6 +245,25 @@
 							$(document).ready(function () {
 								CBWebApp.init();
 								CBWebApp.processKanbanWorkflowWarnings();
+								
+								$('#schedule').click(function(){
+									var email = $('#email').val();
+									var product = CBWebApp.data.productName;
+									
+									$.ajax({
+										type: "POST",
+										url: "${scheduleEmailUrl }",
+										data: "product=" + product + "&email=" + email,
+										success: function(response) {
+											alert("Success: " + response);
+										}, 
+										error: function(e) {
+											alert("Error: " + e)
+										}
+									})
+								})
+								
+								
 							});						
 						</script>
 					</c:when>
