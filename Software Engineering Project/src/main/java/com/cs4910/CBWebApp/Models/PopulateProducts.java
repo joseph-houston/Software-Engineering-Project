@@ -55,7 +55,6 @@ public class PopulateProducts {
 			for(int i = 0; i<products.size();i++){
 				teams = products.get(i).getTeamIds();
 				Team team = service.getTeamById(teams.get(0));
-				System.out.print(team.getType());
 				if(team.getType().equals("Sprints")){
 					sprintProducts.add(products.get(i));
 				}
