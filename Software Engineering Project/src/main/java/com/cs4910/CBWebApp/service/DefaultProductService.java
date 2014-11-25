@@ -73,7 +73,7 @@ public class DefaultProductService implements ProductService {
 				
 				
 					for(int j = 0; j<productUsers.size(); j++){
-						domainProd.addUser(productUsers.get(j).getName());
+						domainProd.addUser(productUsers.get(j).getUserName());
 					}
 				
 					for(int k = 0; k<productThemes.size(); k++){
