@@ -21,9 +21,6 @@ public class PopulateUsers {
 			teams = product.getTeamIds();
 			for(int i = 0; i<teams.size();i++){
 				teamMembers = service.getTeamMembers(teams.get(i));
-				for(int j = 0; j <teamMembers.size(); j++){
-					teamMembers.add(teamMembers.get(j));
-				}
 			}
 		}
 		catch (ScrumWorksException e) {
