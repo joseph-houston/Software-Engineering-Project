@@ -30,8 +30,8 @@ public class DomainProduct implements Comparable<DomainProduct> {
 		return this;
 	}
 	
-	public DomainProduct addTheme(String name){
-		DomainTheme theme = new DomainTheme(name);
+	public DomainProduct addTheme(String name, Long id){
+		DomainTheme theme = new DomainTheme(name, id);
 		this.themes.add(theme);
 		return this;
 	}

@@ -39,11 +39,11 @@ public class DefaultProductService implements ProductService {
 			
 			
 				for(int j = 0; j<productUsers.size(); j++){
-					domainProd.addUser(productUsers.get(j).getName());
+					domainProd.addUser(productUsers.get(j).getUserName());
 				}
 			
 				for(int k = 0; k<productThemes.size(); k++){
-					domainProd.addTheme(productThemes.get(k).getName());
+					domainProd.addTheme(productThemes.get(k).getName(), productThemes.get(k).getId());
 				}
 
 				this.products.put(domainProd.getName(), domainProd);
@@ -57,10 +57,10 @@ public class DefaultProductService implements ProductService {
 	//default will be all kanban products
 		public DefaultProductService(boolean kanban){
 			super();
-			PopulateProducts allProducts = new PopulateProducts();
+			PopulateProducts kanbanProducts = new PopulateProducts();
 			PopulateUsers users = new PopulateUsers();
 			PopulateThemes themes = new PopulateThemes();
-			List<Product> listProducts = allProducts.getAllProducts();
+			List<Product> listProducts = kanbanProducts.getKanbanProducts();
 
 			for(int i = 0; i < listProducts.size(); i++){
 				
@@ -77,7 +77,7 @@ public class DefaultProductService implements ProductService {
 					}
 				
 					for(int k = 0; k<productThemes.size(); k++){
-					domainProd.addTheme(productThemes.get(k).getName());
+						domainProd.addTheme(productThemes.get(k).getName(), productThemes.get(k).getId());
 					}
 
 					this.products.put(domainProd.getName(), domainProd);

@@ -11,10 +11,10 @@ public class DomainTheme implements Comparable<DomainTheme> {
 		this.id = System.currentTimeMillis();
 	}
 
-	public DomainTheme(String name) {
+	public DomainTheme(String name, Long id) {
 		this.name = name;
 		this.product = new DomainProduct("unknown");
-		this.id = System.currentTimeMillis();
+		this.id = id;
 	}		
 
 	public long getId() {
