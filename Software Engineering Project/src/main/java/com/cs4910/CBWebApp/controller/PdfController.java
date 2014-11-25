@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cs4910.CBWebApp.domain.Employee;
 
 /**
  * This controller uses class views to render pdf documents. Thes class view are found in 
