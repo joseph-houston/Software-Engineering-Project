@@ -64,15 +64,60 @@ public class ReportsController {
 	}	
 
 	/**
-	 * This maps an Ajax request for finding products.
+	 * This maps an Ajax request for finding all products.
 	 * @return
 	 */
-	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	@RequestMapping(value = "/allProducts", method = RequestMethod.GET)
 	public @ResponseBody
 	Set<Product> findAllProducts() {
 		logger.debug("finding all products");
 		return this.productService.findAllProducts();
 	}
+
+	/**
+	 * This maps an Ajax request for finding kanban products.
+	 * @return
+	 */
+	@RequestMapping(value = "/kanbanProducts", method = RequestMethod.GET)
+	public @ResponseBody
+	Set<Product> findKanbanProducts() {
+		logger.debug("finding kanban products");
+		return this.productService.findAllProducts();
+	}	
+	
+	
+	/**
+	 * This maps an Ajax request for return kanban workflow warning report.
+	 * @return
+	 */
+	@RequestMapping(value = "/getKanbanWorkflowWarningsReport", method = RequestMethod.GET)
+	public @ResponseBody
+	String getKanbanWorkflowWarningsReport() {
+		logger.debug("Generating Kanban Workflow Warnings Report");
+		return "This data is from kanban workflow warnings.";
+	}
+	
+	/**
+	 * This maps an Ajax request for return kanban activity report.
+	 * @return
+	 */
+	@RequestMapping(value = "/getKanbanActivityReport", method = RequestMethod.GET)
+	public @ResponseBody
+	String getKanbanActivityReport() {
+		logger.debug("Generating Kanban Activity Report");
+		return "This data is from kanban activity report.";
+	}	
+
+	/**
+	 * This maps an Ajax request for return kanban activity report.
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserActivityReport", method = RequestMethod.GET)
+	public @ResponseBody
+	String getUserActivityReport() {
+		logger.debug("Generating User Activity Report");
+		return "This data is from user activity report.";
+	}		
 	
 	/**
 	 * This will map the Ajax request for scheduleEmail form and will get the product name and 

@@ -29,17 +29,13 @@ public class PdfController {
 	 * @return
 	 * @throws Exception
 	 */
-	 @RequestMapping(value = "/report.pdf", method = RequestMethod.GET)
+	 @RequestMapping(value = "/kanbanWorkflowWarningsReport.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanWorkflowWarningsPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
-		  
-		  Employee employee = new Employee();
-		  employee.setFirstName("George");
-		  employee.setLastName("Gathee");
-		  
-		  ModelAndView modelAndView = new ModelAndView("kanbanWorkflowWarningsReportPdf", "command",employee);
-		  
+		  String testStr = request.getParameter("productName");
+		    
+		  ModelAndView modelAndView = new ModelAndView("kanbanWorkflowWarningsReportPdf", "command",testStr);
 		  return modelAndView;
 	 }
 	 
@@ -55,13 +51,9 @@ public class PdfController {
 	 ModelAndView kanbanActivityReportPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
-		  
-		  Employee employee = new Employee();
-		  employee.setFirstName("George");
-		  employee.setLastName("Gathee");
-		  
-		  ModelAndView modelAndView = new ModelAndView("kanbanActivityReportPdf", "command",employee);
-		  
+		  String testStr = request.getParameter("productName");
+		  	  
+		  ModelAndView modelAndView = new ModelAndView("kanbanActivityReportPdf", "command",testStr);
 		  return modelAndView;
 	 }	 
 	 
@@ -76,15 +68,9 @@ public class PdfController {
 	 @RequestMapping(value = "/userActivityReport/report.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanUserActivityReportPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
-		  System.out.println("Calling generatePdf()...");
-		  
-		  String testName = request.getParameter("name");
-		  Employee employee = new Employee();
-		  employee.setFirstName("George");
-		  employee.setLastName(testName);
-		  
-		  ModelAndView modelAndView = new ModelAndView("kanbanUserActivityReportPdf", "command",employee);
-		  
+		  System.out.println("Calling generatePdf()...");  
+		  String testStr = request.getParameter("productName");		  
+		  ModelAndView modelAndView = new ModelAndView("kanbanUserActivityReportPdf", "command", testStr);	  
 		  return modelAndView;
 	 }	 	 
 }
