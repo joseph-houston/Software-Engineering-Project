@@ -105,64 +105,6 @@ CBWebApp.processKanbanActivityReport = function(){
 		e.preventDefault();
 	});	*/	
 	
-	/*
-	$( "#karThemes" ).change(function(e) {
-		// Get our theme name and value
-		CBWebApp.data.themeNames = $( "#karThemes option:selected" ).text();
-		CBWebApp.data.themeValues = $( this ).val();
-		//CBWebApp.showData();
-		if ( CBWebApp.data.productThemes !=  null  && CBWebApp.data.productName != "Select Themes") {		
-			// Auto submit our form to get the report 
-			$.ajax({
-			    type:"POST",
-			    data:CBWebApp.data,
-			    url:"<c:url value="/" />",
-			    async: false,
-			    //dataType: "json",
-			    success: function(response){
-			       //alert("success");
-			       $("#data").html(response);
-			    },
-			    error: function(e){
-			    	alert("Error: " + e);
-			    }
-			});				
-			
-		} else {
-	    	$("export-pdf-btn").prop("disabled",true);				
-		}
-		e.preventDefault();
-	});	
-*/	
-/*	
-	$( "#includeHistory" ).on('change', function(e) {
-		CBWebApp.data.includeHistory = this.checked? true: false;
-		CBWebApp.showData();
-		
-		
-		if ( CBWebApp.data.productThemes !=  null  && CBWebApp.data.productName != "Select Themes") {		
-			// Auto submit our form to get the report 
-			/*$.ajax({
-			    type:"POST",
-			    data:CBWebApp.data,
-			    url:"<c:url value="/" />",
-			    async: false,
-			    //dataType: "json",
-			    success: function(response){
-			       //alert("success");
-			       $("#data").html(response);
-			    },
-			    error: function(e){
-			    	alert("Error: " + e);
-			    }
-			});				
-			
-		} else {
-	    	$("export-pdf-btn").prop("disabled",true);				
-		}
-		e.preventDefault();
-	});	
-	*/	
 		
 	CBWebApp.setStartDate();
 	CBWebApp.setEndDate();

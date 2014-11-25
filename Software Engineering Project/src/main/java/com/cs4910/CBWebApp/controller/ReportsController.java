@@ -70,7 +70,7 @@ public class ReportsController {
 	@RequestMapping(value = "/allProducts", method = RequestMethod.GET)
 	public @ResponseBody
 	Set<Product> findAllProducts() {
-		logger.debug("finding all products");
+		System.out.println("Finding all products.");
 		return this.productService.findAllProducts();
 	}
 
@@ -81,7 +81,7 @@ public class ReportsController {
 	@RequestMapping(value = "/kanbanProducts", method = RequestMethod.GET)
 	public @ResponseBody
 	Set<Product> findKanbanProducts() {
-		logger.debug("finding kanban products");
+		System.out.println("Finding kanban products.");
 		return this.productService.findAllProducts();
 	}	
 	

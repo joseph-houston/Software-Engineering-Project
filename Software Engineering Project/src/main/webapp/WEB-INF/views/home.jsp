@@ -587,7 +587,26 @@
 						<script type="text/javascript"> 
 							$(document).ready(function () {
 								CBWebApp.init();
-								CBWebApp.processKanbanUserActivity();
+
+								$.getJSON('${findAllProductsUrl }', {
+									ajax : 'true'
+								}, function(data) {
+									var html = '<option value="">Select Product</option>';
+									var len = data.length;
+									for ( var i = 0; i < len; i++) {
+										html += '<option value="' + data[i].name + '">'
+												+ data[i].name + '</option>';
+									}
+									html += '</option>';
+								       //now that we have our options, give them to our select
+									$('#products').html(html);
+									              
+								});
+									
+							
+								
+								
+								//CBWebApp.processKanbanUserActivity();
 															
 							});
 						</script>						   	       
