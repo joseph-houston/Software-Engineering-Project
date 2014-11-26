@@ -28,76 +28,67 @@ public class KanbanActivityReport {
 		ScrumWorksAPIService apiService = client.getAPIservice();
 		String report = "";
 		
-		List<Release> releaseList = new ArrayList<Release>();
+		List<DashboardReleaseStatistics> dash = new ArrayList<DashboardReleaseStatistics>();
 		try {
-			releaseList = apiService.getReleasesForProduct(selectedProduct.getId());
+			dash = apiService.getDashboardStatistics(selectedProduct.getId(), startDate, endDate);
 		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		report += "Product: " + selectedProduct.getName() + "\n";
-				  
-		
-		report += "\n" + "Date Range: " + startDate.toString() + " to " + endDate.toString() + "\n\n";
-		
-		for(int t = 0; t < selectedTheme.length; t++)
+		List<BacklogItem> backlogList = new ArrayList<BacklogItem>();
+		for(DashboardReleaseStatistics d : dash)
 		{
-			List<BacklogItem> backlogList = new ArrayList<BacklogItem>();
 			try {
-				backlogList = apiService.getBacklogItemsForThemeInProduct(selectedTheme[t].getId(), selectedProduct.getId(), includeHistory);
+				backlogList.addAll(apiService.getBacklogItemsForReleaseInProduct(d.getRelease().getId(), selectedProduct.getId(), false));
 			} catch (ScrumWorksException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			List<BacklogItemStatus> statusType = new ArrayList<BacklogItemStatus>();
-			try {
-				statusType = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
-			} catch (ScrumWorksException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			if(statusType.isEmpty() == false && backlogList.isEmpty() == false) 
+		}
+		
+		List<BacklogItemStatus> statusType = new ArrayList<BacklogItemStatus>();
+		try {
+			statusType = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		report += "Product: " + selectedProduct.getName() + "\n";		  
+		report += "Themes: ";
+		for(Theme t : selectedTheme)
+			report += t.getName() + "  ";
+		
+		report += "Date Range: " + startDate.toString() + " to " + endDate.toString() + "\n\n";
+		
+		for(BacklogItemStatus status : statusType)
+		{
+			for(BacklogItem backlog : backlogList) 
 			{
-				for(int s = 0; s < statusType.size(); s++)
+				if(backlog.getStatusId() == status.getId())
 				{
-					for(int b = 0; b < backlogList.size(); b++) 
+					report += "Workflow: " + status.toString() + "\n" +
+							   "Title: " + backlog.getName() + "\n" +
+							   "Description: " + backlog.getDescription() + "\n";
+								
+					for(DashboardReleaseStatistics d : dash)
 					{
-						if(backlogList.get(b).getStatusId() == statusType.get(s).getId())
+						if(d.getRelease().getId() == backlog.getReleaseId())
 						{
-							report += "Workflow: " + statusType.get(s).toString() + "\n" +
-									  "Title: " + backlogList.get(b).getName() + "\n" +
-									  "Description: " + backlogList.get(b).getDescription() + "\n" +
-									  "Realease: ";
-							
-							for(int r = 0; r < releaseList.size(); r++)
-							{
-								if(releaseList.get(r).getId() == backlogList.get(b).getReleaseId())
-								{
-									report += releaseList.get(r).getDescription() + "\n";
-								}
-							}
-							
-							report += "Effort: " + backlogList.get(b).getEstimate() + "\n";
-							
-							if(includeHistory == true)
-							{								
-								FilterChangesByType type = new FilterChangesByType();
-								type.setIncludeBacklogItems(true);
-								try {
-									report +=apiService.getChangesSinceRevisionForTypes(selectedProduct.getId(), 0,type).toString();
-								} catch (ScrumWorksException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								report += "\n";
-							}
+							report += "Realease: " + d.getRelease().getDescription() + "\n";
 						}
 					}
+							
+					report += "Effort: " + backlog.getEstimate() + "\n";
+					
+					//Unfinished - Change History for each backlogItem.
+					
 				}
 			}
 		}
+		
+		
 		return report;
 	}
 }
