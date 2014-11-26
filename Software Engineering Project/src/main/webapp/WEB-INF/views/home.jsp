@@ -111,6 +111,7 @@
 	</script>		
 	
 	<script type="text/javascript">
+	
 	$(document).ready(
 			function() {
 				$.getJSON('${findKanbanProductsUrl }', {
@@ -138,7 +139,8 @@
 				    });		
 				});
 				
-			});	
+			});
+
 	/*
 	$(document).ready(
 			function() {
@@ -602,7 +604,24 @@
 									              
 								});
 									
+								$('#products').change(
+										function() {
+											$.getJSON('${findUsersForProductUrl }', {
+												productName : $(this).val(),
+												ajax : 'true'
+											}, function(data) {
+												var html = '<option value="">Select User</option>';
+												var len = data.length;
+												for ( var i = 0; i < len; i++) {
+													html += '<option value="' + data[i].name + '">'
+															+ data[i].name + '</option>';
+												}
+												html += '</option>';
 							
+												$('#karUsers').html(html);
+											});
+											
+										});							
 								
 								
 								//CBWebApp.processKanbanUserActivity();
