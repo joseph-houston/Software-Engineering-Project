@@ -3,7 +3,6 @@ package com.cs4910.CBWebApp.controller;
 import java.io.IOException;
 import java.util.Set;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;

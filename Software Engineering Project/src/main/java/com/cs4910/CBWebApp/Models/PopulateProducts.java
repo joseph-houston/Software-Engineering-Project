@@ -28,7 +28,7 @@ public class PopulateProducts {
 		
 		try {
 			products = service.getProducts();
-			for(int i = 0; i<products.size();i++){
+			for(int i = 0; i < products.size();i++){
 				teams = products.get(i).getTeamIds();
 				Team team = service.getTeamById(teams.get(0));
 				System.out.print(team.getType());
