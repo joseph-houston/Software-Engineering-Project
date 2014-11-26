@@ -29,10 +29,15 @@
 
 	<c:url var="findThemesForProductUrl" value="/themes" />
 	<c:url var="findUsersForProductUrl" value="/users" />
-	<c:url var="findKanbanProductsURL" value="/kanbanProducts" />		
-	<c:url var="findAllProductsURL" value="/allProducts" />	
-				
+	<c:url var="findProductsUrl" value="/products" />
+	<c:url var="findAllProductsUrl" value="/allProducts" />
+	<c:url var="findKanbanProductsUrl" value="/kanbanProducts" />
+	<c:url var="scheduleEmailUrl" value="/scheduleEmail" />	
+	<c:url var="kanbanWorkflowWarningsReportUrl" value="/getKanbanWorkflowWarningsReport" />
+	<c:url var="kanbanActivityReportUrl" value="/getKanbanActivityReport" />		
+	<c:url var="userActivityReportUrl" value="/getUserActivityReport" />
 	<script type="text/javascript">
+	/*
 	$(document).ready(function() { 
 		$('#products').change(
 				function() {
@@ -56,9 +61,31 @@
 				});
 		
 	});
+	*/
 	</script>		
+
+	<script type="text/javascript">
+
+	/*
+	$(document).ready(function() { 
+		$('#export-pdf-btn').click(function(e){
+			var url = window.location;
+			console.log(url);
+			var lastChar = url[url.length - 1];
+			//if(lastChar != "/"){
+			//	url += "/"
+			//}
+			url += "report.pdf";
+			url+="?name=test&id=3";
+			window.open(url);
+			e.preventDefault();
+		});	
+	});
+	*/
+	</script>	
 	
 	<script type="text/javascript">
+	/*
 	$(document).ready(function() { 
 		$('#products').change(
 				function() {
@@ -80,12 +107,14 @@
 				});
 		
 	});
+	*/
 	</script>		
 	
 	<script type="text/javascript">
+	
 	$(document).ready(
 			function() {
-				$.getJSON('${findKanbanProductsURL }', {
+				$.getJSON('${findKanbanProductsUrl }', {
 					ajax : 'true'
 				}, function(data) {
 					var html = '<option value="">Select Product</option>';
@@ -110,25 +139,61 @@
 				    });		
 				});
 				
-			});	
+			});
+
+	/*
+	$(document).ready(
+			function() {
+				$.getJSON('${findAllProductsUrl }', {
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="">Select Product</option>';
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].name + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+			        //now that we have our options, give them to our select
+					$('#products').html(html);
+					              
+				}).complete(function(){
+					$('.select-themes').multiselect({
+						//enableFiltering: true,
+						includeSelectAllOption: true,
+				        nonSelectedText: 'Select Themes',
+				        buttonWidth: '140px',
+				        disableIfEmpty: true,
+				        maxHeight: 150,
+				        nSelectedText: 'themes selected'
+				    });		
+				});
+				
+			});
+	*/
+	// This is for getting the report data
+	/*
+	$(document).ready(
+			function() {
+				$.getJSON('${findAllProductsUrl }', {
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="">Select Product</option>';
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].name + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+			        //now that we have our options, give them to our select
+					$('#products').html(html);
+					              
+				})
+				
+			});		
+	*/
+	
 	</script>
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#city").change(onSelectChange);
-		});
-	
-		function onSelectChange() {
-			var selected = $("#city option:selected");		
-			var output = "";
-			if(selected.val() != 0){
-				output = "You selected Themes: " + selected.text();
-			}
-			$("#output").html(output);
-			
-		}
-	</script>	
-	
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -162,7 +227,6 @@
           </ul>
         </div>
         
-        
         <div class="col-md-10 col-md-offset-2 main">
 	        <div class="row controls">
 		       <c:choose>
@@ -176,16 +240,16 @@
 							
 								
 								<div class="form-group custom-group">
-									<button id="schedule-email" href="#" class="btn btn-default enter-email">Schedule Email</button>
+									<button id="schedule-email-popup" href="#" class="btn btn-default enter-email">Schedule Email</button>
 								</div>
 							    
 							    <div class="form-group custom-group">
-							    	<a href="<c:url value="/kanbanWorkflowWarnings.pdf" />" target="_blank" id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</a>	
+							    	<button id="export-pdf-btn" class="btn btn-default>">Export PDF</button>	
 							    </div>											  			  					  
 							</form>
 							
 						    <!-- Modal HTML -->
-						    <div id="enter-email" class="modal fade">
+						    <div id="email-popup" class="modal fade">
 						        <div class="modal-dialog">
 						            <div class="modal-content">
 						                <div class="modal-header">
@@ -198,14 +262,14 @@
 						                    	 <div class="form-group">
 												    <div class="input-group">
 												      <div class="input-group-addon">Email </div>
-												      <input class="form-control" type="email" placeholder="Enter email">
+												      <input id="email" class="form-control" type="email" placeholder="Enter email">
 												    </div>
 												  </div>							                    
 						                    </form>
 						                </div>
 						                <div class="modal-footer">
 						                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						                    <button type="button" class="btn btn-success">Schedule Email</button>
+						                    <button type="button" class="btn btn-success" id="schedule-email">Schedule Email</button>
 						                </div>
 						            </div>
 						        </div>
@@ -224,6 +288,33 @@
 							$(document).ready(function () {
 								CBWebApp.init();
 								CBWebApp.processKanbanWorkflowWarnings();
+								
+								// Get the scheduling information for this report
+								$('#schedule-email').click(function(){
+									var email = $('#email').val();
+									var product = CBWebApp.data.productValue;
+									
+									// Post the scheduling data
+									$.ajax({
+										type: "POST",
+										url: "${scheduleEmailUrl }",
+										data: "product=" + product + "&email=" + email,
+										success: function(response) {
+											console.log("Success: " + response);
+										}, 
+										error: function(e) {
+											console.log("Error: " + e)
+										}
+									});
+								});
+								
+								$('#export-pdf-btn').click(function(e){
+									var url = window.location;
+									url += "kanbanWorkflowWarningsReport.pdf";
+									url+="?productName=" + CBWebApp.data.productValue;
+									window.open(url);
+									e.preventDefault();
+								});									
 							});						
 						</script>
 					</c:when>
@@ -278,7 +369,136 @@
 						<script type="text/javascript">
 							$(document).ready(function () {
 								CBWebApp.init();
-								CBWebApp.processKanbanActivityReport();
+								CBWebApp.dateUtility();
+								$("#includeHistory").prop("disabled", true);
+								CBWebApp.data.includeHistory= false;
+								
+								$( "#products" ).change(function(e) {
+									// Get our product name and store it to our global
+									CBWebApp.data.productName = $( "#products option:selected" ).text();
+									CBWebApp.data.productValue = $( this ).val();
+									CBWebApp.data.themeNames = null;
+									CBWebApp.data.themeValues = null;
+									
+									CBWebApp.showDebugInfo();
+									
+									if ( CBWebApp.data.productValue!=  null  && CBWebApp.data.productValue != "") {
+										// Now enable our buttons since we have a product
+										//$("#includeHistory").prop("disabled",false);
+										
+										// Get themes for this product
+										$.getJSON('${findThemesForProductUrl }', {
+											productName : CBWebApp.data.productValue,
+											ajax : 'true'
+										}, function(data) {
+											var html = '';
+											var len = data.length;
+											for ( var i = 0; i < len; i++) {
+												html += '<option value="' + data[i].name + '">'
+														+ data[i].name + '</option>';
+											}
+											html += '</option>';
+						
+											$('#karThemes').html(html);
+										}).complete(function(){
+											$('.select-themes').multiselect('rebuild'); 
+										});
+	
+										// Auto submit our form to get the report 
+										/*
+										$.ajax({
+										    type:"POST",
+										    data:CBWebApp.data,
+										    url:"<c:url value="/kanbanActivityReport/" />",
+										    async: false,
+										    //dataType: "json",
+										    success: function(response){
+										       //alert("success");
+										       $("#data").html(response);
+										    },
+										    error: function(e){
+										    	alert("Error: " + e);
+										    }
+										});					
+										*/
+									} else {
+										// if no active product, then these elements are inactive
+								    	$("#export-pdf-btn").prop("disabled",true);
+								    	$("#includeHistory").prop("disabled", true);
+								    	CBWebApp.data.includeHistory = false;
+								    	
+								    	// set katThemes dropdown html to empty and rebuild the dropdown
+								    	$('#karThemes').html("");
+								    	$('.select-themes').multiselect('rebuild'); 
+									}
+									e.preventDefault();
+								});								
+								
+								$( "#karThemes" ).change(function(e) {
+									// Get our theme name and value
+									CBWebApp.data.themeNames = $( "#karThemes option:selected" ).text();
+									CBWebApp.data.themeValues = $( this ).val();
+									CBWebApp.showDebugInfo();
+									if ( CBWebApp.data.themeValues !=  null) {
+										$("#export-pdf-btn").prop("disabled",false);
+										$("#includeHistory").prop("disabled", false);
+										CBWebApp.showDebugInfo();
+										// Auto submit our form to get the report 
+										/*$.ajax({
+										    type:"POST",
+										    data:CBWebApp.data,
+										    url:"<c:url value="/" />",
+										    async: false,
+										    //dataType: "json",
+										    success: function(response){
+										       //alert("success");
+										       $("#data").html(response);
+										    },
+										    error: function(e){
+										    	alert("Error: " + e);
+										    }
+										});	*/				
+										
+									} else {
+								    	$("#export-pdf-btn").prop("disabled",true);	
+								    	CBWebApp.data.includeHistory = false
+								    	$("#includeHistory").prop("disabled", true);
+								    	$("#includeHistory").checked = false;
+									}
+									e.preventDefault();
+								});	
+
+								$( "#includeHistory" ).on('change', function(e) {
+									CBWebApp.data.includeHistory = this.checked? true: false;
+									CBWebApp.showDebugInfo();
+									
+									
+									/*if ( CBWebApp.data.productThemes !=  null  && CBWebApp.data.productName != "Select Themes") {		
+										// Auto submit our form to get the report 
+										/*$.ajax({
+										    type:"POST",
+										    data:CBWebApp.data,
+										    url:"<c:url value="/" />",
+										    async: false,
+										    //dataType: "json",
+										    success: function(response){
+										       //alert("success");
+										       $("#data").html(response);
+										    },
+										    error: function(e){
+										    	alert("Error: " + e);
+										    }
+										});	*/				
+									/*	
+									} else {
+								    	$("export-pdf-btn").prop("disabled",true);				
+									}*/
+									e.preventDefault();
+								});		
+								
+								
+								//CBWebApp.processKanbanActivityReport('${findThemesForProductUrl }');
+								/*
 								$( "#karProduct" ).change(function(e) {
 									// Get our product name and store it to our global
 									CBWebApp.data.productName = $( "#karProduct option:selected" ).text();
@@ -291,7 +511,7 @@
 										
 										// Auto submit our form to get the report 
 										$.ajax({
-										    type:"POST",
+										    type:"GET",
 										    data:CBWebApp.data,
 										    url:"<c:url value="/kanbanActivityReport" />",
 										    async: false,
@@ -314,7 +534,7 @@
 								    	$("#export-pdf-btn").prop("disabled",true);				
 									}
 									e.preventDefault();
-								});																	
+								});	*/																
 							});					
 						</script>								   
 					</c:when>
@@ -368,7 +588,43 @@
 						<script type="text/javascript"> 
 							$(document).ready(function () {
 								CBWebApp.init();
-								CBWebApp.processKanbanUserActivity();
+
+								$.getJSON('${findAllProductsUrl }', {
+									ajax : 'true'
+								}, function(data) {
+									var html = '<option value="">Select Product</option>';
+									var len = data.length;
+									for ( var i = 0; i < len; i++) {
+										html += '<option value="' + data[i].name + '">'
+												+ data[i].name + '</option>';
+									}
+									html += '</option>';
+								       //now that we have our options, give them to our select
+									$('#products').html(html);
+									              
+								});
+									
+								$('#products').change(
+										function() {
+											$.getJSON('${findUsersForProductUrl }', {
+												productName : $(this).val(),
+												ajax : 'true'
+											}, function(data) {
+												var html = '<option value="">Select User</option>';
+												var len = data.length;
+												for ( var i = 0; i < len; i++) {
+													html += '<option value="' + data[i].name + '">'
+															+ data[i].name + '</option>';
+												}
+												html += '</option>';
+							
+												$('#karUsers').html(html);
+											});
+											
+										});							
+								
+								
+								//CBWebApp.processKanbanUserActivity();
 															
 							});
 						</script>						   	       
