@@ -36,7 +36,6 @@
 	<c:url var="kanbanWorkflowWarningsReportUrl" value="/getKanbanWorkflowWarningsReport" />
 	<c:url var="kanbanActivityReportUrl" value="/getKanbanActivityReport" />		
 	<c:url var="userActivityReportUrl" value="/getUserActivityReport" />
-					
 	<script type="text/javascript">
 	/*
 	$(document).ready(function() { 

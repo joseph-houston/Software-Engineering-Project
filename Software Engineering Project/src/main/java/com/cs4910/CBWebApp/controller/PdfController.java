@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-
 /**
  * This controller uses class views to render pdf documents. Thes class view are found in 
  * the view package. 
@@ -16,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Njenga Gathee
  *
  */
+
 
 @Controller
 public class PdfController {
@@ -50,8 +50,7 @@ public class PdfController {
 	 ModelAndView kanbanActivityReportPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");
-		  String testStr = request.getParameter("productName");
-		  	  
+		  String testStr = request.getParameter("productName"); 
 		  ModelAndView modelAndView = new ModelAndView("kanbanActivityReportPdf", "command",testStr);
 		  return modelAndView;
 	 }	 

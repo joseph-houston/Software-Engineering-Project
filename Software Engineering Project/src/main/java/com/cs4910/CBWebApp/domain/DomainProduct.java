@@ -6,44 +6,44 @@ import java.util.TreeSet;
 
 
 
-public class Product implements Comparable<Product> {
+public class DomainProduct implements Comparable<DomainProduct> {
 	private Long id;
 	private String name;
-	private Set<Theme> themes = new TreeSet<Theme>();
-	private Set<User> users = new TreeSet<User>();
+	private Set<DomainTheme> themes = new TreeSet<DomainTheme>();
+	private Set<DomainUser> users = new TreeSet<DomainUser>();
 	
-	public Product() {
+	public DomainProduct() {
 		super();
 		this.id = System.currentTimeMillis();
 		this.name = "Unknown Product";
 	}
 	
-	public Product(String name) {
+	public DomainProduct(String name) {
 		super();
 		this.id = System.currentTimeMillis();
 		this.name = name;
 	}
 	
-	public Product addTheme(Theme theme){
+	public DomainProduct addTheme(DomainTheme theme){
 		this.themes.add(theme);
 		theme.setProduct(this);		
 		return this;
 	}
 	
-	public Product addTheme(String name){
-		Theme theme = new Theme(name);
+	public DomainProduct addTheme(String name, Long id){
+		DomainTheme theme = new DomainTheme(name, id);
 		this.themes.add(theme);
 		return this;
 	}
 	
-	public Product addUser(User user){
+	public DomainProduct addUser(DomainUser user){
 		this.users.add(user);
 		user.setProduct(this);
 		return this;
 	}
 	
-	public Product addUser(String name){
-		User user = new User(name);
+	public DomainProduct addUser(String name){
+		DomainUser user = new DomainUser(name);
 		this.users.add(user);
 		return this;
 	}
@@ -68,13 +68,13 @@ public class Product implements Comparable<Product> {
 	}
 
 
-	public Set<Theme> getThemes() {
+	public Set<DomainTheme> getThemes() {
 		return Collections.unmodifiableSet(this.themes);
 	}
 
-	public Theme getTheme(String name) {
-		Theme result = null;
-		for (Theme t : this.themes) {
+	public DomainTheme getTheme(String name) {
+		DomainTheme result = null;
+		for (DomainTheme t : this.themes) {
 			if (t.getName().equals(name)) {
 				return t;
 			}
@@ -82,18 +82,18 @@ public class Product implements Comparable<Product> {
 		return result;
 	}	
 
-	public void setThemes(Set<Theme> themes) {
+	public void setThemes(Set<DomainTheme> themes) {
 		this.themes = themes;
 	}
 
 
-	public Set<User> getUsers() {
+	public Set<DomainUser> getUsers() {
 		return Collections.unmodifiableSet(this.users);
 	}
 
-	public User getUser(String name) {
-		User result = null;
-		for (User u : this.users) {
+	public DomainUser getUser(String name) {
+		DomainUser result = null;
+		for (DomainUser u : this.users) {
 			if (u.getName().equals(name)) {
 				return u;
 			}
@@ -101,13 +101,13 @@ public class Product implements Comparable<Product> {
 		return result;
 	}	
 	
-	public void setUsers(Set<User> users) {
+	public void setUsers(Set<DomainUser> users) {
 		this.users = users;
 	}
 
 
 	@Override
-	public int compareTo(Product o) {
+	public int compareTo(DomainProduct o) {
 		return this.name.compareTo(o.name);
 	}
 
@@ -129,7 +129,7 @@ public class Product implements Comparable<Product> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		DomainProduct other = (DomainProduct) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

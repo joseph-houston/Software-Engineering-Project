@@ -1,15 +1,9 @@
 package com.cs4910.CBWebApp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.cs4910.CBWebApp.Models.API2SoapClient;
-import com.danube.scrumworks.api2.client.Product;
-import com.danube.scrumworks.api2.client.ScrumWorksAPIService;
 import com.danube.scrumworks.api2.client.ScrumWorksException;
 
 

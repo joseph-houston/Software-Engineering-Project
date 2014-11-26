@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cs4910.CBWebApp.Models.ReportScheduler;
-import com.cs4910.CBWebApp.domain.Product;
-import com.cs4910.CBWebApp.domain.Theme;
-import com.cs4910.CBWebApp.domain.User;
-import com.cs4910.CBWebApp.service.ProductService;
+import com.cs4910.CBWebApp.domain.DomainProduct;
+import com.cs4910.CBWebApp.domain.DomainTheme;
+import com.cs4910.CBWebApp.domain.DomainUser;
+import com.cs4910.CBWebApp.service.DefaultProductService;
 
 
 /**
@@ -30,10 +30,10 @@ import com.cs4910.CBWebApp.service.ProductService;
 @Controller
 public class ReportsController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportsController.class);
-	
-	// create an instance of ProductService type
-	@Inject 
-	private ProductService productService;
+	 
+	private DefaultProductService productService = new DefaultProductService();
+	private DefaultProductService kanbanProductService = new DefaultProductService(true);
+
 	
 	/**
 	 * This maps an Ajax request for finding users. 
@@ -42,11 +42,11 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<User> usersForProduct(@RequestParam(value = "productName", required = true) String product) {
+	Set<DomainUser> usersForProduct(@RequestParam(value = "productName", required = true) String product) {
 		logger.debug("finding users for product " + product);
-		System.out.println("n users: " + productService.findAllUsersForProduct(product).size());
-		System.out.println("n themes: " + productService.findAllThemesForProduct(product).size());		
-		return this.productService.findAllUsersForProduct(product);
+		System.out.println("n users: " + kanbanProductService.findAllUsersForProduct(product).size());
+		System.out.println("n themes: " + kanbanProductService.findAllThemesForProduct(product).size());		
+		return this.kanbanProductService.findAllUsersForProduct(product);
 	}	
 
 	/**
@@ -56,7 +56,7 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/themes", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Theme> themesForProduct(@RequestParam(value = "productName", required = true) String product) {
+	Set<DomainTheme> themesForProduct(@RequestParam(value = "productName", required = true) String product) {
 		logger.debug("finding themes for product " + product);
 		System.out.println("n users: " + productService.findAllUsersForProduct(product).size());
 		System.out.println("n themes: " + productService.findAllThemesForProduct(product).size());
@@ -69,7 +69,7 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/allProducts", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Product> findAllProducts() {
+	Set<DomainProduct> findAllProducts() {
 		System.out.println("Finding all products.");
 		return this.productService.findAllProducts();
 	}
@@ -80,12 +80,11 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/kanbanProducts", method = RequestMethod.GET)
 	public @ResponseBody
-	Set<Product> findKanbanProducts() {
+	Set<DomainProduct> findKanbanProducts() {
 		System.out.println("Finding kanban products.");
-		return this.productService.findAllProducts();
+		return this.kanbanProductService.findAllProducts();
 	}	
-	
-	
+		
 	/**
 	 * This maps an Ajax request for return kanban workflow warning report.
 	 * @return

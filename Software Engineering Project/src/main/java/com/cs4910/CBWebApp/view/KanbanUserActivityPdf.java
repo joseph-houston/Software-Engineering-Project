@@ -17,6 +17,7 @@ public class KanbanUserActivityPdf extends AbstractPdfView {
 	 protected void buildPdfDocument(Map model,
 	   Document document, PdfWriter writer, HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
+
 		String str = (String) model.get("command");
 		
 		Paragraph header = new Paragraph(new Chunk("Kanban User Activity Report",FontFactory.getFont(FontFactory.HELVETICA, 18)));
