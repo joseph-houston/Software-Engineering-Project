@@ -7,10 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
-<<<<<<< HEAD
-=======
-import com.cs4910.CBWebApp.domain.DomainEmployee;
->>>>>>> refs/remotes/origin/Joe_Local
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.FontFactory;
