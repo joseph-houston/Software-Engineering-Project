@@ -5,138 +5,35 @@ CBWebApp = {};
 CBWebApp.init = function(){
 	this.data = {}; // We store our data here per report view
 	this.data.productName = null;
-	this.data.productValue = null;
-
-
-	//this.data.startDate = null;
-	//this.data.endDate = null
-	//this.data.includeDetails = null;
-	//this.data.name = "cbwebapp";
 	this.disablePdfButton();
-	//alert(CBWebApp.data.name + CBWebApp.data.common);
 }
 
-
-// Process kanban-workflow-warnings
-CBWebApp.processKanbanWorkflowWarnings = function() {
-	// No product yet so disable schedule email pop up.
-	$("#schedule-email-popup").prop("disabled", true);
-		
-	$( "#products" ).change(function(e) {
-		CBWebApp.data.productName = $( "#products option:selected" ).text();
-		CBWebApp.data.productValue = $( this ).val();
-	
-		if ( CBWebApp.data.productValue !=  null  && CBWebApp.data.productValue != "") {
-			// Now enable our buttons since we have a product
-			$("#export-pdf-btn").prop("disabled",false);
-			$("#schedule-email-popup").prop("disabled",false);
-			
-			CBWebApp.showDebugInfo();		
-			// Auto submit our form to get the report 
-			/*
-			$.ajax({
-			    type:"GET",
-			    data:CBWebApp.data,
-			    url:"<c:url value="/" />",
-			    async: false,
-			    //dataType: "json",
-			    success: function(response){
-			       //alert("success");
-			       $("#data").html(response);
-			    },
-			    error: function(e){
-			    	alert("Error: " + e);
-			    }
-			});
-			*/			
-		} else {
-	    	$("#export-pdf-btn").prop("disabled",true);
-	    	$("#schedule-email-popup").prop("disabled",true);					
+CBWebApp.findProducts = function(productsUrl) {
+	$.getJSON(productsUrl, {
+		ajax : 'true'
+	}, function(data) {
+		var html = '<option value="">Select Product</option>';
+		var len = data.length;
+		for ( var i = 0; i < len; i++) {
+			html += '<option value="' + data[i].name + '">'
+					+ data[i].name + '</option>';
 		}
-		
-		e.preventDefault();
-	});		
-	
-	// Proces modal for email scheduling
-	$("#schedule-email-popup").click(function(event){	
-		$("#email-popup").modal('show');
-		event.preventDefault();
-	});	   	
-	
-};
-
-//Process kanban-activity-report
-CBWebApp.processKanbanActivityReport = function(){
-	//this.dateUtility();
-	
-	//$("#karThemes").attr("disabled", true);
-	/*$( "#products" ).change(function(e) {
-		// Get our product name and store it to our global
-		CBWebApp.data.productName = $( "#products option:selected" ).text();
-		CBWebApp.data.productValue = $( this ).val();
-		CBWebApp.data.themeNames = null;
-		CBWebApp.data.themeValues = null;		
-		CBWebApp.showDebugInfo();
-		
-		if ( CBWebApp.data.productValue!=  null  && CBWebApp.data.productValue != "") {
-			// Now enable our buttons since we have a product
-			$("#export-pdf-btn").prop("disabled",false);
-			CBWebApp.findThemesForProduct(url);
-			// Auto submit our form to get the report 
-			
-			$.ajax({
-			    type:"POST",
-			    data:CBWebApp.data,
-			    url:"<c:url value="/kanbanActivityReport/" />",
-			    async: false,
-			    //dataType: "json",
-			    success: function(response){
-			       //alert("success");
-			       $("#data").html(response);
-			    },
-			    error: function(e){
-			    	alert("Error: " + e);
-			    }
-			});					
-			
-		} else {
-	    	$("#export-pdf-btn").prop("disabled",true);				
-		}
-		e.preventDefault();
-	});	*/	
-	
-		
-	CBWebApp.setStartDate();
-	CBWebApp.setEndDate();
-
-	/*
-	$('.select-themes').multiselect({
-		//enableFiltering: true,
-		includeSelectAllOption: true,
-        nonSelectedText: 'Select Themes',
-        buttonWidth: '140px',
-        disableIfEmpty: true,
-        maxHeight: 150,
-        nSelectedText: 'themes selected'
-    });		
-	*/
+		html += '</option>';
+        //now that we have our options, give them to our select
+		$('#products').html(html);
+		              
+	}).complete(function(){
+		$('.select-themes').multiselect({
+			//enableFiltering: true,
+			includeSelectAllOption: true,
+	        nonSelectedText: 'Select Themes',
+	        buttonWidth: '140px',
+	        disableIfEmpty: true,
+	        maxHeight: 150,
+	        nSelectedText: 'themes selected'
+	    });		
+	});	
 }
-
-
-// Process kanban-user-activity 
-CBWebApp.processKanbanUserActivity = function() {
-	this.dateUtility();
-	
-/*	$('.select-themes').multiselect({
-		//enableFiltering: true,
-		includeSelectAllOption: true,
-        nonSelectedText: 'Select Themes',
-        buttonWidth: '140px',
-        disableIfEmpty: true,
-        maxHeight: 150,
-        nSelectedText: 'themes selected'
-    });*/
-};
 
 // This is common to all reports
 CBWebApp.disablePdfButton = function(){
@@ -152,36 +49,72 @@ CBWebApp.dateUtility = function() {
 	});	
 };
 
-CBWebApp.setStartDate = function() {
+CBWebApp.setStartDate = function(action) {
 	$('#startDate').on('change', function(e){
-		CBWebApp.data.startDate = $('#startDate').val();	
-		CBWebApp.showData();
+		CBWebApp.data.startDate = $('#startDate').val();
+		CBWebApp.submitData(action) 
 		e.preventDefault();
 	});
 }
 
-CBWebApp.setEndDate = function() {
+CBWebApp.setEndDate = function(action) {
 	$('#endDate').on('change', function(e){
 		CBWebApp.data.endDate = $('#endDate').val();
-		CBWebApp.showData();
+		CBWebApp.submitData(action) 
 		e.preventDefault();
 	});	
 }
 
+CBWebApp.submitData = function(action) {
+	$.ajax({
+		url: action,
+		data: CBWebApp.getFormData(),
+		success: function(response) {
+			$("#reportData").html(response);									       
+			console.log("Success: " + response);
+		}, 
+		error: function(e) {
+			console.log("Error: " + e)
+		}
+	});		
+}
 
+CBWebApp.getFormData = function(){
+	var data = "";
+	$.each( CBWebApp.data, function( key, value ) {
+		if(value != undefined || value != null){
+			if (key == 'productName'){
+				data += key + "=" + value;
+			} else {
+				data += "&" +  key + "=" + value;
+			}
+		}
+	});	
+	return data;
+}
 
-
-
-
-
-
-
+CBWebApp.exportReport = function(reportName){
+	$('#export-pdf-btn').click(function(e){
+		var currentUrl = window.location;
+		var lastChar =  String(currentUrl)[String(currentUrl).length-1];
+		if (lastChar != "/"){
+			currentUrl += "/report.pdf";;
+		} else {
+			currentUrl += "report.pdf";
+		}
+		currentUrl +="?" + CBWebApp.getFormData();
+		window.open(currentUrl);
+		e.preventDefault();
+	});		
+}
 
 // Test 
 CBWebApp.showDebugInfo = function(){
 	console.log("Product Name = " + CBWebApp.data.productName);
-	console.log("Product Value = " + CBWebApp.data.productValue);
-	console.log("Theme Names = " + CBWebApp.data.themeNames);
-	console.log("Theme Values = " + CBWebApp.data.themeValues);		
+	console.log("Theme Values = " + CBWebApp.data.themeValues);	
+	console.log("User Name = " + CBWebApp.data.userName);
 	console.log("Include History = " + CBWebApp.data.includeHistory);
+	console.log("Start Date = " + CBWebApp.data.startDate);
+	console.log("End Date = " + CBWebApp.data.endDate);
+	console.log("Include Details = " + CBWebApp.data.includeDetails);	
 }
