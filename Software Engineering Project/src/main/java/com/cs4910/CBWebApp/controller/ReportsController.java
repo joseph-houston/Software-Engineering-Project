@@ -17,7 +17,6 @@ import com.cs4910.CBWebApp.Models.ReportScheduler;
 import com.cs4910.CBWebApp.domain.DomainProduct;
 import com.cs4910.CBWebApp.domain.DomainTheme;
 import com.cs4910.CBWebApp.domain.DomainUser;
-import com.cs4910.CBWebApp.domain.ReportData;
 import com.cs4910.CBWebApp.service.DefaultProductService;
 
 
