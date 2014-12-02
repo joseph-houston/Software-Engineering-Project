@@ -90,9 +90,15 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/getKanbanWorkflowWarningsReport", method = RequestMethod.GET)
 	public @ResponseBody
-	String getKanbanWorkflowWarningsReport() {
+	String getKanbanWorkflowWarningsReport(@RequestParam String productName) {
 		logger.debug("Generating Kanban Workflow Warnings Report");
-		return "This data is from kanban workflow warnings.";
+		// This should return json object 
+
+		// Test your report generation here and print your outputs to console for now.
+		
+		
+		
+		return "You selected " + productName + " as your product";
 	}
 	
 	/**
@@ -101,9 +107,19 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/getKanbanActivityReport", method = RequestMethod.GET)
 	public @ResponseBody
-	String getKanbanActivityReport() {
+	String getKanbanActivityReport(@RequestParam(value = "productName", required = true) String productName,
+			@RequestParam(value = "themeValues", required = true) String[] themes,
+			@RequestParam(value = "includeHistory", required = false) boolean includeHistory,
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate) {
 		logger.debug("Generating Kanban Activity Report");
-		return "This data is from kanban activity report.";
+		
+		// Test your report generation here and print your outputs to console for now.
+		
+				
+		
+		return "Data submited: " + productName + " Themes: " + themes[0] + " Include History: " +
+				includeHistory + " Start Date: " + startDate + " End Date: " + endDate;
 	}	
 
 	/**
@@ -112,9 +128,18 @@ public class ReportsController {
 	 */
 	@RequestMapping(value = "/getUserActivityReport", method = RequestMethod.GET)
 	public @ResponseBody
-	String getUserActivityReport() {
+	String getUserActivityReport(@RequestParam(value = "productName", required = true) String productName,
+			@RequestParam(value = "userName", required = true) String userName,
+			@RequestParam(value = "includeDetails", required = false) boolean includeDetails,
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate) {
 		logger.debug("Generating User Activity Report");
-		return "This data is from user activity report.";
+		
+		// Test your report generation here and print your outputs to console for now.
+		
+		
+		return "Data submited: " + productName + " User Name: " + userName + " Include History: " +
+				includeDetails + " Start Date: " + startDate + " End Date: " + endDate;
 	}		
 	
 	/**
@@ -132,6 +157,7 @@ public class ReportsController {
 		System.out.println(result);
 		String dataPath  = request.getSession().getServletContext().getRealPath("/WEB-INF/data/emails.dat");
 		
+		System.out.println(dataPath);
 		String record = product + ":" + email;
 		
 		ReportScheduler.storeScheduleRecord(dataPath, record);

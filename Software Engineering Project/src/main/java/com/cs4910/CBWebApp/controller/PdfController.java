@@ -28,7 +28,7 @@ public class PdfController {
 	 * @return
 	 * @throws Exception
 	 */
-	 @RequestMapping(value = "/kanbanWorkflowWarningsReport.pdf", method = RequestMethod.GET)
+	 @RequestMapping(value = "/report.pdf", method = RequestMethod.GET)
 	 ModelAndView kanbanWorkflowWarningsPdf(HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
 		  System.out.println("Calling generatePdf()...");

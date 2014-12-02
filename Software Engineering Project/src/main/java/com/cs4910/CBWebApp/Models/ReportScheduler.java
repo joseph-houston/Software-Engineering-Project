@@ -20,22 +20,12 @@ public class ReportScheduler {
 		writer.close();			
 	}
 	
-	public static void readScheduleRecords(String path) throws IOException {
-		/*FileReader fr = new FileReader(path); 
-		char [] a = new char[50];
-		fr.read(a);
-		for(char c : a)
-			System.out.print(c);
-		fr.close();	
-		*/
-		
+	public static void readScheduleRecords(String path) throws IOException {	
 		BufferedReader reader = new BufferedReader(new FileReader(path));
-		 
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			System.out.println(line);
 		}
-	 
 		reader.close();		
 	}
 }

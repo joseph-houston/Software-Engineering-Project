@@ -29,8 +29,8 @@ public class HomeController {
 		model.addAttribute("reportType", reportType);
 
 		// now we call the class for this report and process what to return
-		String reportData = "Data from KanbanWorkflowWarnings model";
-		model.addAttribute("reportData", reportData);	
+		//String reportData = "Data from KanbanWorkflowWarnings model";
+		///model.addAttribute("reportData", reportData);	
 		
 		// this is an example to call the backend objects and also display the 
 		// the activities on the console. You can also pass whatever data you want to 
