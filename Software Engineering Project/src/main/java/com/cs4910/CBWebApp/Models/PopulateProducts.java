@@ -32,7 +32,6 @@ public class PopulateProducts {
 				teams = products.get(i).getTeamIds();
 				for (int j = 0; j < teams.size(); j++) {
 					Team team = service.getTeamById(teams.get(j));
-					System.out.print(team.getType());
 					if(team.getType().equals("Kanban")){
 						kanbanProducts.add(products.get(i));
 					}
@@ -80,4 +79,22 @@ public class PopulateProducts {
 		return products;
 	}
 	
+	
+	public Product getSelectedProduct(String productName) {
+		Product selectedProduct = new Product();
+		String name;
+		List<Product> products = this.getAllProducts();
+		for (int i = 0; i < products.size(); i++){
+			System.out.println(products.get(i).getName());
+		}
+		//for(int i = 0; i < products.size(); i++) {
+		//	selectedProduct = products.get(i);
+		//	name = selectedProduct.getName();
+		//	if(name.equals(productName)){
+		//		return selectedProduct;
+		//	}
+		//}
+		
+		return null;
+	}
 }
