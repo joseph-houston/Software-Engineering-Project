@@ -145,11 +145,11 @@ public class ReportsController {
 			//System.out.println();
 		//}
 
-		KanbanWorkflowWarningsReport report = new KanbanWorkflowWarningsReport();
-		report.getBacklogItems(productName);
+		KanbanWorkflowWarnings report = new KanbanWorkflowWarnings(productName);
+		String test = report.displayReport();
 		
 		
-		return "You selected " + productName + " as your product";
+		return test;
 	}
 	
 	/**

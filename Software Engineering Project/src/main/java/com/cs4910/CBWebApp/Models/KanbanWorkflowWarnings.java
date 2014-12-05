@@ -7,11 +7,67 @@ import java.util.List;
 import com.danube.scrumworks.api2.client.*;
 
 
-public class KanbanWorkflowWarnings 
-{
-
-		Product selectedProduct;	
+public class KanbanWorkflowWarnings {
+	private API2SoapClient client = new API2SoapClient();
+	private ScrumWorksAPIService apiService = client.getAPIservice();
+	private Product selectedProduct;
+	
+	
+	public KanbanWorkflowWarnings(String productName) {
+		super();
+		try {
+			this.selectedProduct = apiService.getProductByName(productName);
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
+	
+	/***
+	 * To test this, we need to add a lot of items in each workflow, maybe vary their
+	 * release dates and count how many backlog items belong to each custom status for 
+	 * for the warning condition. Figure out how to get themes for backlog items and also
+	 * calculate days in the number of days in the releases 
+	 * @return
+	 * @throws ScrumWorksException
+	 */
+	public String displayReport() throws ScrumWorksException {
+		String result = "";
+		List<BacklogItemStatus> customStatuses = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
+		List<BacklogItem> backlogItems = apiService.getBacklogItemsInProduct(selectedProduct.getId(), false);
 		
+		for(BacklogItemStatus s : customStatuses) {
+			result += "<strong>Workflow: " + s.getName() + "</strong> Status Id: " + s.getId() + "<br>\n";
+			result += "<ul>";
+			result += "<li>";
+				result += "Past release date<br>";
+				result += "Release Name - Themes: ";
+			result += "</li>";
+			
+			result += "<li>";
+				result += "In workflow for x days <br>";
+				result += "Release Name - Themes: ";
+			result += "</li>";			
+			
+			result += "<li>";
+				result += "<span class='text-warning'>WARNING</span> - Capacity exceeded";
+			result += "</li>";			
+			result += "</ul>";
+			System.out.println(s.getName());
+		}
+		
+		result += "<h3>Backlog Items in: " + selectedProduct.getName() + "</h3>";
+		for(BacklogItem b : backlogItems) {
+			result += "Backlog Item Name: " +  b.getName() + " Status Id: " + b.getStatusId() + "<br>";
+		}
+		System.out.println();
+		return result;
+	}
+		
+		
+		
+		
+		/*
 		public void KanbanWorkflowWarningForm(Product selectedProduct)
 		{
 			this.selectedProduct = selectedProduct;
@@ -244,6 +300,7 @@ public class KanbanWorkflowWarnings
 			return report;
 		
 		}
+		*/
 }
 
 

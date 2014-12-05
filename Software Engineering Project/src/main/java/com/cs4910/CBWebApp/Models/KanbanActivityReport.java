@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cs4910.CBWebApp.Models.API2SoapClient;
 import com.danube.scrumworks.api2.client.*;
 
 public class KanbanActivityReport {
