@@ -10,18 +10,76 @@ import com.danube.scrumworks.api2.client.*;
 public class KanbanWorkflowWarnings 
 {
 
-		Product selectedProduct;	
+	API2SoapClient client = new API2SoapClient();
+	ScrumWorksAPIService apiService = client.getAPIservice();
+	Product selectedProduct;	
 		
-		public void KanbanWorkflowWarningForm(Product selectedProduct)
-		{
-			this.selectedProduct = selectedProduct;
+	public KanbanWorkflowWarnings(String selectedProductName)
+	{
+		try {
+			this.selectedProduct = apiService.getProductByName(selectedProductName);
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+		
+	private List<BacklogItemStatus> getStatusList(){
+		List<BacklogItemStatus> backlogItemStatus = new ArrayList<BacklogItemStatus>();
+		try {
+			backlogItemStatus = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
+			return backlogItemStatus;
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return backlogItemStatus;
+		}
+	}
+		
+	private List<BacklogItem> getBacklogItemsForStatus(List<BacklogItemStatus> items, String status){
+		List<BacklogItem> itemList = new ArrayList<BacklogItem>();
+			
+		try {
+			long statusID = 0;
+			
+			itemList = apiService.getBacklogItemsInProduct(selectedProduct.getId(), true);
+			for(BacklogItemStatus s: items){
+				if(s.getName()==status)
+					statusID = s.getId();
+			}
+			for(BacklogItem i: itemList){
+				if(i.getId()==statusID)
+					itemList.add(i);
+			}
+			return itemList;
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return itemList;
+		}
+	}
+		
+	public String display(){
+		String result = "";
+		List<BacklogItemStatus> statusList = getStatusList();
+		List<BacklogItem> selectedItems = getBacklogItemsForStatus(statusList, "Selected");
+		List<BacklogItem> inProgressItems = getBacklogItemsForStatus(statusList, "In Progress");
+		List<BacklogItem> impededItems = getBacklogItemsForStatus(statusList, "Impeded");
+		List<BacklogItem> uncommitedItems= getBacklogItemsForStatus(statusList, "Uncommited");
+		List<String> status = new ArrayList<String>();
+		
+		result = generateStatusReport(selectedItems, "Selected")+generateStatusReport(inProgressItems, "In Progress")
+				+generateStatusReport(impededItems, "Impeded")+generateStatusReport(uncommitedItems, "Uncommited");
+			
+			
+		return result;
+	}
+		
 		
 		@Override
 		public String toString()
 		{
-			API2SoapClient client = new API2SoapClient();
-			ScrumWorksAPIService apiService = client.getAPIservice();
+
 			String report = "";
 			List<Task> taskList = new ArrayList<Task>();
 			List<Task> selectedTaskList = new ArrayList<Task>();

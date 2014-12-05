@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cs4910.CBWebApp.Models.KanbanWorkflowWarnings;
 import com.cs4910.CBWebApp.Models.ReportScheduler;
 import com.cs4910.CBWebApp.domain.DomainProduct;
 import com.cs4910.CBWebApp.domain.DomainTheme;
@@ -96,9 +97,8 @@ public class ReportsController {
 
 		// Test your report generation here and print your outputs to console for now.
 		
-		
-		
-		return "You selected " + productName + " as your product";
+		KanbanWorkflowWarnings report = new KanbanWorkflowWarnings(productName);
+		return report.display();
 	}
 	
 	/**
