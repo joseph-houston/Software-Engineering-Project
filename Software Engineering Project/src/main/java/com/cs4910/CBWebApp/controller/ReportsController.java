@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cs4910.CBWebApp.Models.API2SoapClient;
-import com.cs4910.CBWebApp.Models.KanbanWorkflowWarningsReport;
 import com.cs4910.CBWebApp.Models.KanbanWorkflowWarnings;
 import com.cs4910.CBWebApp.Models.PopulateProducts;
 import com.cs4910.CBWebApp.Models.ReportScheduler;
