@@ -61,7 +61,7 @@ public class KanbanWorkflowWarnings
 		
 	private List<Release> getReleaseList()
 	{
-		List<Release> releaseList = getReleaseList();
+		List<Release> releaseList = new ArrayList<Release>();
 		try {
 			releaseList = apiService.getReleasesForProduct(selectedProduct.getId());
 		} catch (ScrumWorksException e) {
