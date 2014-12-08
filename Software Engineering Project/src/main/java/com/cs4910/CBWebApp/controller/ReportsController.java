@@ -101,53 +101,11 @@ public class ReportsController {
 		logger.debug("Generating Kanban Workflow Warnings Report");
 		// This should return json object 
 		// Test your report generation here and print your outputs to console for now.
-		API2SoapClient client = new API2SoapClient();
-		ScrumWorksAPIService service = client.getAPIservice();	
-		//Product selectedProduct = service.getProductByName(productName);
-		
-		//List<BacklogItem> backlogItems = service.getBacklogItemsInProduct(, false);
-		
-		//PopulateProducts productList = new PopulateProducts();
-		//List<Product> products = new ArrayList<Product>();
-		//products = productList.getKanbanProducts();
-		//System.out.println("Testing client");
-		//for(int j = 0; j < products.size(); j++){
-			//System.out.println("Product Name: " + products.get(j).getName() + " ID:" + products.get(j).getId() + "Team Ids : " + products.get(j).getTeamIds());
-			//System.out.println("----------------------------------------------------------------------");
-			//List<BacklogItem> backlogItems = service.getBacklogItemsInProduct(products.get(j).getId(), false);
-			//for (BacklogItem b : backlogItems) {
-				//System.out.println("BacklogItem Name: " + b.getName());
-				//List<BacklogItem> backlogItems = service.getBacklogItemsInRelease(r.getId(), false);
-				//for (BacklogItem b : backlogItems){
-				//	System.out.println("BacklogItem: " + b.getName() + " Id: " + b.getId());
-				//}
-				
-			//}
-			
-		//	List<BacklogItemStatus> status = service.getCustomBacklogItemStatuses(products.get(j).getId());
-			//List<Task> tasks = service.getTasks(products.get(j).getId());
-		//	for (BacklogItemStatus s : status) {
-		//		System.out.println("Custom BacklogItem: " + s.getName() + " Id: " + s.getId() + " Type: " + s.getType());
-				//for (Task t : tasks){
-				//	System.out.println("Task: " + t.getName() + " Id: " + t.getId() + " " + t.getStatus());
-		//		//}
-		//	}
-			//List<BacklogItem> backlogItems = service.getBacklogItemsInProduct(products.get(j).getId(), false);
-			
-			//for(int k =0; k < backlogItems.size(); k++){
-			//	System.out.println("Backlog Item Name: " + backlogItems.get(k).getName() + " Id: " + backlogItems.get(k).getId());
-			//	List<Task> tasks = service.getTasks(backlogItems.get(k).getId());
-			//	for(int i = 0; i < tasks.size(); i++){
-			//		System.out.println("Task Name: " + tasks.get(i).getName() + " Status: " + tasks.get(i).getStatus());
-			//	}
-			//}
-			//System.out.println();
-		//}
 
 		KanbanWorkflowWarnings report = new KanbanWorkflowWarnings(productName);
-		String test = report.displayReport();
+		String test = report.display();
 		
-		
+	
 		return test;
 	}
 	

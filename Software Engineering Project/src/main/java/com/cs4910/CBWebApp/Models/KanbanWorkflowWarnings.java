@@ -1,5 +1,6 @@
 package com.cs4910.CBWebApp.Models;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,13 +32,41 @@ public class KanbanWorkflowWarnings {
 	 * @return
 	 * @throws ScrumWorksException
 	 */
-	public String displayReport() throws ScrumWorksException {
+	public String display() throws ScrumWorksException {
 		String result = "";
 		List<BacklogItemStatus> customStatuses = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
 		List<BacklogItem> backlogItems = apiService.getBacklogItemsInProduct(selectedProduct.getId(), false);
+		List<Release> releasesForProduct = apiService.getReleasesForProduct(selectedProduct.getId());
+		//List<Theme> themesForProduct = apiService.getThemesForProduct(selectedProduct.getId());
 		
-		for(BacklogItemStatus s : customStatuses) {
-			result += "<strong>Workflow: " + s.getName() + "</strong> Status Id: " + s.getId() + "<br>\n";
+		Date today = new Date();
+		String releaseName;
+		Date releaseDate = new Date();
+		
+		for(BacklogItemStatus s : customStatuses) {		
+			result += "<strong>Workflow: " + s.getName() + "</strong><br>\n";
+			for(BacklogItem b : backlogItems){
+				if(b.getStatusId() == s.getId()){
+					// get name and increment count for this item
+					// get b.endDate and do a check to satisfy the statement below
+					result +=  b.getName() + " is past release date - ";		
+					for(Release r : releasesForProduct){
+						if(r.getId().equals(b.getReleaseId())){
+							releaseName = r.getName();
+							releaseDate = r.getEndDate();
+							result +="Release Date: " + releaseDate + " Release: " + releaseName + " Theme(s): ";
+						}
+						for(Theme t : b.getThemes()) {
+							result += t.getName() + ", ";
+						}
+						
+					}
+					result += "<br>";
+				}
+				
+			}
+			result += "<br>";
+			/* for now...
 			result += "<ul>";
 			result += "<li>";
 				result += "Past release date<br>";
@@ -53,14 +82,13 @@ public class KanbanWorkflowWarnings {
 				result += "<span class='text-warning'>WARNING</span> - Capacity exceeded";
 			result += "</li>";			
 			result += "</ul>";
+			*/
 			System.out.println(s.getName());
 		}
-		
-		result += "<h3>Backlog Items in: " + selectedProduct.getName() + "</h3>";
-		for(BacklogItem b : backlogItems) {
-			result += "Backlog Item Name: " +  b.getName() + " Status Id: " + b.getStatusId() + "<br>";
-		}
 		System.out.println();
+		if (result.equals("")){
+			result += "Nothing to display for this workflow.";
+		}
 		return result;
 	}
 		
