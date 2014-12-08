@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cs4910.CBWebApp.Models.KanbanActivityReport;
 import com.cs4910.CBWebApp.Models.KanbanWorkflowWarnings;
 import com.cs4910.CBWebApp.Models.ReportScheduler;
 import com.cs4910.CBWebApp.domain.DomainProduct;
@@ -118,12 +119,12 @@ public class ReportsController {
 		
 				
 		
-		return "Data submited: " + productName + " Themes: " + themes[0] + " Include History: " +
-				includeHistory + " Start Date: " + startDate + " End Date: " + endDate;
+		KanbanActivityReport kanbanReport = new KanbanActivityReport(productName, themes, true, startDate, endDate);
+		return kanbanReport.toString();
 	}	
 
 	/**
-	 * This maps an Ajax request for return kanban activity report.
+	 * This maps an Ajax request for return User Activity Report.
 	 * @return
 	 */
 	@RequestMapping(value = "/getUserActivityReport", method = RequestMethod.GET)

@@ -12,14 +12,14 @@ import com.danube.scrumworks.api2.client.*;
 public class KanbanActivityReport {
 
 	Product selectedProduct;
-	List<Theme>  selectedTheme;
+	List<Theme>  selectedTheme = new ArrayList<Theme>();
 	Boolean includeHistory;
 	Date startDate, endDate;
 	API2SoapClient client = new API2SoapClient();
 	ScrumWorksAPIService apiService = client.getAPIservice();
 	String report = "";
 	
-	public KanbanActivityReport(String selectedProduct, String[]  selectedTheme, String includeHistory, String startDate, String endDate)
+	public KanbanActivityReport(String selectedProduct, String[]  selectedTheme, Boolean includeHistory, String startDate, String endDate)
 	{
 		try {
 			this.selectedProduct = apiService.getProductByName(selectedProduct);
@@ -39,22 +39,19 @@ public class KanbanActivityReport {
 		{
 			for(Theme t: tempTheme)
 			{
-				if(s == t.getName())
+				if(s.equals(t.getName()))
 				{
 					this.selectedTheme.add(t);
 				}
 					
 			}
 		}
+		this.includeHistory = includeHistory;
 		
-		if(includeHistory.toLowerCase() == "true")
-			this.includeHistory = true;
-		else
-			this.includeHistory = false;
-		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Date date = new Date();
 		try {
-			date = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse(startDate);
+			date = sdf.parse(startDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,7 +59,7 @@ public class KanbanActivityReport {
 			this.startDate = date;
 			
 		try {
-			date = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse(endDate);
+			date = sdf.parse(endDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,9 +102,14 @@ public class KanbanActivityReport {
 			{
 				for(Theme s : selectedTheme)
 				{
-					if(t == s)
+					if(t.getName().equals(s.getName()))
 					{
-						tempBacklogList.add(b);
+						if(tempBacklogList.contains(b)){
+						//do nothing
+						}
+						else{ //add b to tempBacklogList
+							tempBacklogList.add(b);
+						}
 					}
 				}
 			}
@@ -148,7 +150,7 @@ public class KanbanActivityReport {
 					{
 						for(BacklogItem b : backlogList)
 						{
-							if(changedB == b)
+							if(changedB.equals(b))
 							{
 								backlogWithChange.add(b);
 								revisionInfo.add(bc.getRevisionInfo());
@@ -162,48 +164,50 @@ public class KanbanActivityReport {
 		
 		
 		//Title
-		report += "Product: " + selectedProduct.getName() + "\n";		  
+		report += "Product: " + selectedProduct.getName() + "<br />";		  
 		report += "Themes: ";
-		for(Theme t : selectedTheme)
+
+		for(Theme t : selectedTheme){
 			report += t.getName() + "  ";
+		}
 		
-		report += "Date Range: " + startDate.toString() + " to " + endDate.toString() + "\n\n";
+		report += "Date Range: " + startDate.toString() + " to " + endDate.toString() + "<br /><br />";
 		
 		for(BacklogItemStatus status : statusType) 
 		{
 			for(BacklogItem backlog : backlogList) 
 			{
-				for(Theme t: backlog.getThemes() )
-				{
-					for(Theme s : selectedTheme)
+				System.out.println(backlog.getName());
+				//Backlog matches a status & matches one of the selected themes.
+				if(backlog.getStatusId().equals(status.getId())) 
 					{
-						//Backlog matches a status & matches one of the selected themes.
-						if(backlog.getStatusId() == status.getId() && t == s) 
-							{
 								
-								report += "Workflow: " + status.toString() + "\n" +
-											"Title: " + backlog.getName() +" for " + t.getName()  + "\n" +
-											"Description: " + backlog.getDescription() + "\n";
-								
-									for(DashboardReleaseStatistics d : dash)
-										{
-											if(d.getRelease().getId() == backlog.getReleaseId())
-											{
-												report += "Realease: " + d.getRelease().getDescription() + "\n";
-											}
-										}
-							
-									report += "Effort: " + backlog.getEstimate() + "\n";
-					
-									/*//Unfinished - Change History for each backlogItem.
-									if(includeHistory)
+						report += "Workflow: " + status.getName() + "<br />" +
+									"Title: " + backlog.getName() +" for ";
+									for(Theme th : backlog.getThemes())
 									{
-										
-									}*/
-					
+										report += th.getName() + " ";
+									}
+										 
+						report +="<br />" + "Description: " + backlog.getDescription() + "<br />";
+								
+						for(DashboardReleaseStatistics d : dash)
+						{
+							if(d.getRelease().getId().equals(backlog.getReleaseId()))
+							{
+								report += "Realease: " + d.getRelease().getName() + "<br />";
 							}
+						}
+							
+						report += "Effort: " + backlog.getEstimate() + "<br />" + "<br />";
+					
+						/*//Unfinished - Change History for each backlogItem.
+						if(includeHistory)
+						{
+										
+						}*/
+					
 					}
-				}
 			}
 		}
 		
