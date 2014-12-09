@@ -37,26 +37,29 @@ public class KanbanWorkflowWarnings
 	}
 		
 	private List<BacklogItem> getBacklogItemsForStatus(List<BacklogItemStatus> items, String status){
-		List<BacklogItem> itemList = new ArrayList<BacklogItem>();
+		List<BacklogItem> fullItemList = new ArrayList<BacklogItem>();
+		List<BacklogItem> sortedItemList = new ArrayList<BacklogItem>();
 			
 		try {
 			long statusID = 0;
 			
-			itemList = apiService.getBacklogItemsInProduct(selectedProduct.getId(), true);
+			fullItemList = apiService.getBacklogItemsInProduct(selectedProduct.getId(), true);
 			for(BacklogItemStatus s: items){
-				if(s.getName()==status)
+				if(s.getName().equals(status)){
 					statusID = s.getId();
+				}
 			}
-			for(BacklogItem i: itemList){
-				if(i.getId()==statusID)
-					itemList.add(i);
+			for(BacklogItem i: fullItemList){
+				if(i.getStatusId().equals(statusID)){
+					sortedItemList.add(i);
+				}
 			}
-			return itemList;
+			
 		} catch (ScrumWorksException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return itemList;
 		}
+		return sortedItemList;
 	}
 		
 	private List<Release> getReleaseList()
@@ -79,14 +82,14 @@ public class KanbanWorkflowWarnings
 		List<BacklogItem> selectedItems = getBacklogItemsForStatus(statusList, "Selected");
 		List<BacklogItem> inProgressItems = getBacklogItemsForStatus(statusList, "In Progress");
 		List<BacklogItem> impededItems = getBacklogItemsForStatus(statusList, "Impeded");
-		List<BacklogItem> uncommittedItems= getBacklogItemsForStatus(statusList, "Uncommitted");
+		List<BacklogItem> UncommittedItems= getBacklogItemsForStatus(statusList, "Uncommitted");
 		
 		List<Release> releaseList = getReleaseList();
 		
 		result += selectedReport(selectedItems,releaseList) +
 				  inProgressReport(inProgressItems,releaseList) +
 				  impededReport(impededItems,releaseList) +
-				  umcommittedReport(uncommittedItems,releaseList);
+				  umcommittedReport(UncommittedItems,releaseList);
 			
 		return result;
 	}
@@ -104,36 +107,36 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
+				if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
 				{
-					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 				
-				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
+				if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 				{
-					report += "&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 			}
 		}
 		
 		if(selectedItems.size() > 15)
-			report += "&#09Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)<br />";
+			report += "Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)<br />";
 		
 		return report;
 	}
@@ -150,36 +153,36 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
+				if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
 				{
-					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 				
-				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
+				if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
 				{
-					report += "&#09" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 			}
 		}
 		
 		if(inProgressItems.size() > 15)
-			report += "&#09Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)<br />";
+			report += "Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)<br />";
 		
 		return report;
 	}
@@ -196,295 +199,66 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
+				if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
 				{
-					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 				
-				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
+				if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 				{
-					report += "&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
-							  "Release: " + r.getName() + " - Themes: ";
+					report += "" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+							  " Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "<br />";
+					report += "<br />" +"<br />";
 				}
 				
 			}
 		}
 		
 		if(impededItems.size() > 5)
-			report += "&#09Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 5)<br />";
+			report += "Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 5)<br />";
 		
 		
 		return report;
 	}
 	
-	public String umcommittedReport(List<BacklogItem> uncommittedItems, List<Release> releaseList)
+	public String umcommittedReport(List<BacklogItem> UncommittedItems, List<Release> releaseList)
 	{
 		String report = "";
 		Date today = new Date();
 		
 		report += "<br />Workflow: Uncommitted<br />";
-		for(BacklogItem b : uncommittedItems)
+		for(BacklogItem b : UncommittedItems)
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today) && r.isArchived() == false)
+				if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today) && r.isArchived() == false)
 				{
-					report += "&#09Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "<br />";
+					report += "Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") + "<br />";
 				}
 				
-				if(b.getReleaseId() == r.getId() && 
+				if(b.getReleaseId().equals(r.getId()) && 
 				  (r.getEndDate().getTime()/ (24 * 60 * 60 * 1000))  >  ((today.getTime()/ (24 * 60 * 60 * 1000)) + b.getEstimate()) )
 				{
-					report += "&#09Warning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"<br />";
+					report += "Warning - Release " + r.getId().toString() + " - " + r.getName() + " has Uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +"<br />";
 				}
 			}
 		}
 		
 		return report;
 	}
-	
-	
-		/*Version 0.75
-		 * @Override
-		public String toString()
-		{
-
-			String report = "";
-			List<Task> taskList = new ArrayList<Task>();
-			List<Task> selectedTaskList = new ArrayList<Task>();
-			List<BacklogItem> selectedBacklogItem = new ArrayList<BacklogItem>();
-			List<Task> inProgressTaskList = new ArrayList<Task>();
-			List<BacklogItem> inProgressBacklogItem = new ArrayList<BacklogItem>();
-			List<Task> impededTaskList = new ArrayList<Task>();
-			List<BacklogItem> impededBacklogItem = new ArrayList<BacklogItem>();
-			List<Task> uncommittedTaskList = new ArrayList<Task>();
-			List<BacklogItem> uncommittedBacklogItem = new ArrayList<BacklogItem>();
-			List<Release> releaseList = new ArrayList<Release>();
-			Date today = new Date();
-			List<Theme> themeList = new ArrayList<Theme>();
-			
-			try {
-				releaseList = apiService.getReleasesForProduct(selectedProduct.getId());
-			} catch (ScrumWorksException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			try {
-				taskList = apiService.getTasksForProduct(selectedProduct.getId());
-			} catch (ScrumWorksException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			for(Task t : taskList)
-			{
-				if(t.getStatus().toLowerCase() == "selected")
-					selectedTaskList.add(t);
-					
-				if(t.getStatus().toLowerCase() == "in progress")
-					inProgressTaskList.add(t);
-				
-				if(t.getStatus().toLowerCase() == "impededId")
-					impededTaskList.add(t);
-				
-				if(t.getStatus().toLowerCase() == "uncommitted")
-					uncommittedTaskList.add(t);
-			}
-							
-			
-			
-			for(Task t : selectedTaskList)
-			{
-				try {
-					selectedBacklogItem.add(apiService.getBacklogItemById(t.getBacklogItemId()));
-				} catch (ScrumWorksException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			for(Task t : inProgressTaskList)
-			{
-				try {
-					inProgressBacklogItem.add(apiService.getBacklogItemById(t.getBacklogItemId()));
-				} catch (ScrumWorksException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			for(Task t : impededTaskList)
-			{
-				try {
-					impededBacklogItem.add(apiService.getBacklogItemById(t.getBacklogItemId()));
-				} catch (ScrumWorksException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			for(Task t : uncommittedTaskList)
-			{
-				try {
-					uncommittedBacklogItem.add(apiService.getBacklogItemById(t.getBacklogItemId()));
-				} catch (ScrumWorksException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			report += "Workflow: Selected<br />";
-			
-			for(BacklogItem b : selectedBacklogItem)
-			{
-				for(Release r : releaseList)
-				{
-					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
-					{
-						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-					
-					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
-					{
-						report += "\&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-				}
-			}
-			
-			if(selectedBacklogItem.size() > 15)
-				report += "&#09Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)<br />";
-			
-			
-			
-			report += "<br />Workflow: In Progress<br />";
-			
-			for(BacklogItem b : inProgressBacklogItem)
-			{
-				for(Release r : releaseList)
-				{
-					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
-					{
-						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-					
-					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
-					{
-						report += "\&#09" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-				}
-			}
-			
-			if(inProgressBacklogItem.size() > 15)
-				report += "&#09Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)<br />";
-
-			
-			
-			report += "<br />Workflow: Impeded<br />";
-			
-			for(BacklogItem b : impededBacklogItem)
-			{
-				for(Release r : releaseList)
-				{
-					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
-					{
-						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-					
-					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
-					{
-						report += "\&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
-								  "Release: " + r.getName() + " - Themes: ";
-						themeList = b.getThemes();
-						for(Theme t : themeList)
-						{
-							report += t.getName() + " ";
-						}
-						report += "<br />";
-					}
-					
-				}
-			}
-			
-			if(impededBacklogItem.size() > 15)
-				report += "&#09Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 15)<br />";
-
-			
-			report += "<br />Workflow: Uncommitted<br />";
-			for(BacklogItem b : uncommittedBacklogItem)
-			{
-				for(Release r : releaseList)
-				{
-					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today) && r.isArchived() == false)
-					{
-						report += "&#09Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "<br />";
-					}
-					
-					if(b.getReleaseId() == r.getId() && 
-					  (r.getEndDate().getTime()/ (24 * 60 * 60 * 1000))  >  ((today.getTime()/ (24 * 60 * 60 * 1000)) + b.getEstimate()) )
-					{
-						report += "&#09Warning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"<br />";
-					}
-				}
-			}
-			
-			return report;
-		
-		}*/
 }
 
 
