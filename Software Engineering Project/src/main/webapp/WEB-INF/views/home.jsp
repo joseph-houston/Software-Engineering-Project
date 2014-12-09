@@ -270,7 +270,13 @@
 									if ( CBWebApp.data.themeValues !=  null) {
 										$("#export-pdf-btn").prop("disabled",false);
 										$("#includeHistory").prop("disabled", false);
-										CBWebApp.submitData("${kanbanActivityReportUrl }");	
+										if(CBWebApp.data.startDate == undefined){
+											$("#reportData").html("Select start date");
+										} else if(CBWebApp.data.endDate == undefined){
+											$("#reportData").html("Select end date");
+										} else {
+											CBWebApp.submitData("${kanbanActivityReportUrl }");	
+										}																					
 									} else {
 								    	$("#export-pdf-btn").prop("disabled",true);	
 								    	CBWebApp.data.includeHistory = false
@@ -283,7 +289,13 @@
 
 								$( "#includeHistory" ).on('change', function(e) {
 									CBWebApp.data.includeHistory = this.checked? true: false;
-									CBWebApp.submitData("${kanbanActivityReportUrl }");
+									if(CBWebApp.data.startDate == undefined){
+										$("#reportData").html("Select start date");
+									} else if(CBWebApp.data.endDate == undefined){
+										$("#reportData").html("Select end date");
+									} else {
+										CBWebApp.submitData("${kanbanActivityReportUrl }");	
+									}	
 									e.preventDefault();
 								});		
 								
@@ -327,8 +339,8 @@
 									    <input id="endDate"type="text" class="small-control form-control" name="end" placeholder="mm/dd/yyyy"/>
 									    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 									</div>									
-								</div>		
-								
+								</div>	
+																    								
 							    <div class="form-group custom-group">
 							    	<button id="export-pdf-btn" class="btn btn-default>" type="button">Export PDF</button>	
 							    </div>					
@@ -389,7 +401,14 @@
 									if ( CBWebApp.data.userName !=  null) {
 										$("#export-pdf-btn").prop("disabled",false);
 										$("#includeDetails").prop("disabled", false);
-										CBWebApp.submitData("${userActivityReportUrl }");	
+										// don't submit if dates are undefined
+										if(CBWebApp.data.startDate == undefined){
+											$("#reportData").html("Select start date");
+										} else if(CBWebApp.data.endDate == undefined){
+											$("#reportData").html("Select end date");
+										} else {
+											CBWebApp.submitData("${userActivityReportUrl }");
+										}											
 									} else {
 								    	$("#export-pdf-btn").prop("disabled",true);	
 								    	CBWebApp.data.includeDetails = false
@@ -401,12 +420,18 @@
 
 								$( "#includeDetails" ).on('change', function(e) {
 									CBWebApp.data.includeDetails = this.checked? true: false;
-									CBWebApp.submitData("${userActivityReportUrl }");
+									if(CBWebApp.data.startDate == undefined){
+										$("#reportData").html("Select start date");
+									} else if(CBWebApp.data.endDate == undefined){
+										$("#reportData").html("Select end date");
+									} else {
+										CBWebApp.submitData("${userActivityReportUrl }");
+									}	
 									e.preventDefault();
 								});		
 								
 								CBWebApp.setStartDate("${userActivityReportUrl }");
-								CBWebApp.setEndDate("${userActivityReportUrl }");	
+								CBWebApp.setEndDate("${userActivityReportUrl }");
 								CBWebApp.exportReport();
 							});			
 							

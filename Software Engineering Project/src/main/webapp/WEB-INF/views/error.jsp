@@ -1,13 +1,3 @@
-
-
-<body>
-    <center>
-        <h2>Sorry, the email was not sent because of the following error:</h2>
-        <h3>${exception.message}</h3>
-    </center>
-</body>
-</html>
-
 <%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
@@ -65,15 +55,12 @@
             <li><a href="<c:url value="/userActivityReport" />">User Activity Report</a></li>
 
           </ul>
-        </div>
-        
+        </div>       
         <div class="col-md-10 col-md-offset-2 main">
-	        <div class="row controls">
-			    <center>
-			        <h2>Sorry, your request could not be processed because of the following error:</h2>
-			        <h3>${exception.message}</h3>
-			    </center>
-				           
+	        <div class="row">
+		        <h2>Sorry, your request could not be processed because of the following error:</h2>
+		        <h3>${exception.toString()}</h3>
+		        <h3>${exception.getStackTrace()}</h3>	
 	        </div>  
 	           
         </div>

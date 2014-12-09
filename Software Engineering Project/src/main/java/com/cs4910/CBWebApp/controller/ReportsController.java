@@ -1,12 +1,17 @@
 package com.cs4910.CBWebApp.controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,11 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cs4910.CBWebApp.Models.KanbanActivityReport;
 import com.cs4910.CBWebApp.Models.KanbanWorkflowWarnings;
 import com.cs4910.CBWebApp.Models.ReportScheduler;
-import com.cs4910.CBWebApp.Models.UserActivityReport;
 import com.cs4910.CBWebApp.domain.DomainProduct;
 import com.cs4910.CBWebApp.domain.DomainTheme;
 import com.cs4910.CBWebApp.domain.DomainUser;
 import com.cs4910.CBWebApp.service.DefaultProductService;
+import com.cs4910.CBWebApp.service.Mailer;
+import com.danube.scrumworks.api2.client.*;
 
 
 /**
@@ -36,6 +42,8 @@ public class ReportsController {
 	private DefaultProductService productService = new DefaultProductService();
 	private DefaultProductService kanbanProductService = new DefaultProductService(true);
 
+    @Autowired
+    private JavaMailSender mailSender;
 	
 	/**
 	 * This maps an Ajax request for finding users. 
@@ -90,14 +98,12 @@ public class ReportsController {
 	/**
 	 * This maps an Ajax request for return kanban workflow warning report.
 	 * @return
+	 * @throws ScrumWorksException 
 	 */
 	@RequestMapping(value = "/getKanbanWorkflowWarningsReport", method = RequestMethod.GET)
 	public @ResponseBody
-	String getKanbanWorkflowWarningsReport(@RequestParam String productName) {
+	String getKanbanWorkflowWarningsReport(@RequestParam String productName) throws ScrumWorksException {
 		logger.debug("Generating Kanban Workflow Warnings Report");
-		// This should return json object 
-
-		// Test your report generation here and print your outputs to console for now.
 		
 		KanbanWorkflowWarnings report = new KanbanWorkflowWarnings(productName);
 		return report.display();
@@ -120,7 +126,7 @@ public class ReportsController {
 		
 				
 		
-		KanbanActivityReport kanbanReport = new KanbanActivityReport(productName, themes, true, startDate, endDate);
+		KanbanActivityReport kanbanReport = new KanbanActivityReport(productName, themes, includeHistory, startDate, endDate);
 		return kanbanReport.toString();
 	}	
 
@@ -132,15 +138,19 @@ public class ReportsController {
 	public @ResponseBody
 	String getUserActivityReport(@RequestParam(value = "productName", required = true) String productName,
 			@RequestParam(value = "userName", required = true) String userName,
-			@RequestParam(value = "includeDetails", required = false) boolean includeDetails,
-			@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate) {
+			@RequestParam(value = "includeDetails", required = true) boolean includeDetails,
+			@RequestParam(value = "startDate", required = true) String startDate,
+			@RequestParam(value = "endDate", required = true) String endDate) {
 		logger.debug("Generating User Activity Report");
+		if(startDate.equals("null")){
+			return "Select start date";
+		}
 		
 		// Test your report generation here and print your outputs to console for now.
 		
-		UserActivityReport userReport = new UserActivityReport(productName, userName, includeDetails, startDate, endDate);
-		return userReport.toString();
+		
+		return "Data submited: " + productName + " User Name: " + userName + " Include History: " +
+				includeDetails + " Start Date: " + startDate + " End Date: " + endDate;
 	}		
 	
 	/**
@@ -166,6 +176,32 @@ public class ReportsController {
 
 		return result;
 	}
+	
+	// @Scheduled(cron="*/20 * * * * ?")
+	 public void sendReport() throws ScrumWorksException {	
+		 System.out.println("Sending report...\n");
+		 	
+			KanbanWorkflowWarnings report = new KanbanWorkflowWarnings("Term-Project");
+		 
+			String recipientAddress = "";
+			String subject = "";
+			String message = report.display();
+			 
+			// prints debug info
+			System.out.println("To: " + recipientAddress);
+			System.out.println("Subject: " + subject);
+			System.out.println("Message: " + message);
+			 
+			// creates a simple e-mail object
+			SimpleMailMessage email = new SimpleMailMessage();
+			email.setTo(recipientAddress);
+			email.setSubject(subject);
+			email.setText(message);
+			 
+			// sends the e-mail
+			mailSender.send(email);
+	 }
+
 	
 	
 }
