@@ -3,6 +3,7 @@ package com.cs4910.CBWebApp.Models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +19,12 @@ public class UserActivityReport {
 	User selectedUser;
 	Boolean includeDetails;
 	Date startDate, endDate;
+	
+	 enum Day
+	 {
+	     Dec, Nov, Oct, Feb, Mar, Apr, May, Jun, Jul, Aug //Default is Jan no listing it.
+	 }
+	
 	
 	public UserActivityReport(String selectedProduct, String selectedUser, Boolean includeDetails, String startDate, String endDate)
 	{
@@ -73,7 +80,7 @@ public class UserActivityReport {
 		{
 
 			try {
-				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 0).getBacklogItemChanges();
+				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 30).getBacklogItemChanges();
 			} catch (ScrumWorksException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -87,29 +94,170 @@ public class UserActivityReport {
 			revisionInfo.add(b.getRevisionInfo());
 		}
 		
-		int i = 0;
 		List<RevisionInfo> usersRevisionInfo = new ArrayList<RevisionInfo>();
 		for(RevisionInfo rInfo : revisionInfo)
 		{
-			System.out.println("Step 1");
-			System.out.println(rInfo.getUserName() + " " + selectedUser.getUserName());
 			if(rInfo.getUserName().equals("administrator"))
 			{
 				usersRevisionInfo.add(rInfo);
-				System.out.println("Activate");
-				System.out.println(usersRevisionInfo.get(i).getTimeStamp());
-				i++;
 			}
 		}
+		
+//		//Tue Dec 09 11:40:22 CST 2014
+//		Date changedDate = new Date();
+//		try {
+//			changedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse(usersRevisionInfo.get(0).getTimeStamp().toString().equalsIgnoreCase(usersRevisionInfo.get(0).getTimeStamp().toString().substring(10,22)));
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		report += "User Activity for " + selectedUser.getUserName() + " from " + 
 				  startDate.toString().replaceAll("00:00:00 CST ", "") + " to " + endDate.toString().replaceAll("00:00:00 CST ", "") + "<br />";
 		
 		
+//		//Change String from API to Date.
+//		String month, changedDate;
+//		Date newDate = new Date();
+//		for(RevisionInfo rInfo : usersRevisionInfo)
+//		{
+//			changedDate = "";//Reset between rInfos
+//			month = rInfo.getTimeStamp().toString().substring(4, 7);
+//			switch(Day.valueOf(month))
+//			{
+//				case Dec:
+//					changedDate += "12/";
+//					break;
+//				case Nov:
+//					changedDate += "11/";
+//					break;
+//				case Oct:
+//					changedDate += "10/";
+//					break;
+//				case Feb:
+//					changedDate += "02/";
+//					break;
+//				case Mar:
+//					changedDate += "03/";
+//					break;
+//				case Apr:
+//					changedDate += "04/";
+//					break;
+//				case May:
+//					changedDate += "05/";
+//					break;
+//				case Jun:
+//					changedDate += "06/";
+//					break;
+//				case Jul:
+//					changedDate += "07/";
+//					break;
+//				case Aug:
+//					changedDate += "08/";
+//					break;
+//				default:
+//					changedDate += "01/";;
+//						
+//			}
+//			
+//			changedDate += rInfo.getTimeStamp().toString().substring(8,10) + "/";
+//			changedDate += rInfo.getTimeStamp().toString().substring(24, 28);
+//			
+//			try {
+//				newDate = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse(changedDate);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			rInfo.setTimeStamp(newDate);
+//		}
+//		
+//		
+//		
+//		//Creates a tempList that will add all RevisionInfo that are between specified dates.
+//		ArrayList<RevisionInfo> tempList = new ArrayList<RevisionInfo>();
+//		for(RevisionInfo rInfo: usersRevisionInfo)
+//		{			
+//			//If rInfo.getTimeStamp() is between start and end Date then tempList.add(rInfo).
+//			if( rInfo.getTimeStamp().after(startDate) && rInfo.getTimeStamp().before(endDate) )
+//			{
+//				tempList.add(rInfo);
+//			}
+//		}
+//		usersRevisionInfo = tempList;
+//		ArrayList<RevisionInfo> tempList = new ArrayList<RevisionInfo>();
+//		//Each index of the List is a List of every change made on that day. 
+//		ArrayList<ArrayList<RevisionInfo>> eachDay = new ArrayList<ArrayList<RevisionInfo>>();
+//		for(RevisionInfo rInfo: usersRevisionInfo)
+//		{
+//			if( eachDay.isEmpty())
+//			{
+//				tempList.clear();
+//				tempList.add(rInfo);
+//				eachDay.add(tempList);
+//			}
+//			else
+//			{
+//				innerloop:for(ArrayList<RevisionInfo> ed : eachDay )
+//				{
+//					if(ed.get(0).getTimeStamp().equals(rInfo.getTimeStamp()))
+//					{
+//						ed.add(rInfo);
+//					}
+//					else
+//					{
+//							tempList.clear();
+//							tempList.add(rInfo);
+//							eachDay.add(tempList);
+//							break innerloop;
+//					}
+//				}		
+//			}
+//		}
+//		
+//		for(ArrayList<RevisionInfo> ed : eachDay )
+//		{
+//		System.out.println(ed.size());
+//		}
+		
+		//For every day that has revisions sort the revisions by what they updated (Sprint/Kanban) and by who for.
+		//Find a way to sort each revision on a day by what they updated and who they updated for.
+		//Then update the commented report += near 226.
+		
+//		for(ArrayList<RevisionInfo> ed : eachDay)
+//		{
+//			//report+= ed.get(0).getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + ed.size() + " updates in X" + "<br />";		
+//			
+//			
+//			
+//			
+//			
+//			for(RevisionInfo specificDay : ed)
+//			{
+//				report += specificDay.getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + " updates in Xyz" + "<br />";
+//				
+//				//includeDetails here on each specific day.
+//			}
+//		}
+		
+		for(RevisionInfo uRI : usersRevisionInfo)
+		{
+			report += uRI.getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + " updates in X" + "<br />";
+		}
+		
+		
+//		report += "Number of Days: " + usersRevisionInfo.size() + "<br />";
+		
+//		int numberOfUpdates = 0;
+//		for(ArrayList<RevisionInfo> ed : eachDay)
+//		{
+//			numberOfUpdates = ed.size();
+//		}
+		report += "Number of Updates: " + usersRevisionInfo.size() + "<br />";
+		
 		return report;
 	}
 }
-
 
 
 
