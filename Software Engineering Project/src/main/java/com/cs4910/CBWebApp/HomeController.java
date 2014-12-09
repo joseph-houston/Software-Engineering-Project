@@ -4,24 +4,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
+import com.danube.scrumworks.api2.client.ScrumWorksException;
 
 
 /**
- * Handles requests for the application home page.
+ * Handles requests for the application home page. This controller just return a home
+ * page view. The view has a logic to display the three different reports depending on 
+ * the action mapped and also the string 'reportType'. It also sets the title and report 
+ * type.
  */
 @Controller
 public class HomeController {
-	
-	
-	
 	/**
-	 * Simply selects the home view to render by returning its name.
+	 * This will map kanban workflow warnings url and which is the root and also display
+	 * the report.
+	 * @throws ScrumWorksException 
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home( Model model) {
+	public String home( Model model) throws ScrumWorksException {
 		String title = "Kanban Workflow Warnings";
 		String reportType = "kanban-workflow-warnings";
 		
@@ -29,17 +29,31 @@ public class HomeController {
 		model.addAttribute("reportType", reportType);
 
 		// now we call the class for this report and process what to return
-		String reportData = "Data from KanbanWorkflowWarnings model";
-		model.addAttribute("reportData", reportData);		
+		//String reportData = "Data from KanbanWorkflowWarnings model";
+		///model.addAttribute("reportData", reportData);	
+		
+		// this is an example to call the backend objects and also display the 
+		// the activities on the console. You can also pass whatever data you want to 
+		// model and display the same on the report page. For example see how title 
+		// is being passed to model and see how it is being parsed on home.jsp
+		/*
+		API2SoapClient client = new API2SoapClient();
+		ScrumWorksAPIService service = client.getAPIservice();
+		List<Product> products = new ArrayList<Product>();
+		products = service.getProducts();
+		System.out.println("Testing client");
+		System.out.println(products.get(0).getName().toString());
+		System.out.println(products.get(0).getId().toString());
+		*/
 		return "home";		
-
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody String showWarningReport(@RequestParam String Product_Name, @RequestParam int Product_Value ){
-		return "Product Name:" + Product_Name + " Product Value: " + Product_Value;
-	}
-	
+	/**
+	 * This action will map kanban activity report url and there will use the
+	 * logic on home view to display kanban activity report.
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/kanbanActivityReport", method = RequestMethod.GET)
 	public String kanbanActivityReport( Model model) {
 		String title = "Kanban Activity Report";
@@ -53,22 +67,13 @@ public class HomeController {
 		model.addAttribute("reportData", reportData);
 		
 		return "home";
-	}	
-	@RequestMapping(value = "/kanbanActivityReport", method = RequestMethod.POST)
-	public @ResponseBody String populateThemes(@RequestParam String productName,  WebRequest webRequest, Model model){
-		
-		String selectData = "<option value=\"1\">Theme 1</option>";
-		
-        if (AjaxUtils.isAjaxRequest(webRequest)) {
-            // prepare model for rendering success message in this request
-            model.addAttribute("ajaxRequest", true);
-            model.addAttribute("selectData", selectData);
-            return null;
-        }		
-		return "home";
 	}
 	
-	
+	/**
+	 * This will map user activity report url and will display the report.
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/userActivityReport", method = RequestMethod.GET)
 	public String userActivityReport(Model model) {
 		String title = "User Activity Report";
@@ -82,6 +87,5 @@ public class HomeController {
 		model.addAttribute("reportData", reportData);
 		return "home";
 	}
-
 	
 }

@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
-import com.cs4910.CBWebApp.domain.Employee;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.FontFactory;
@@ -18,10 +17,11 @@ public class KanbanUserActivityPdf extends AbstractPdfView {
 	 protected void buildPdfDocument(Map model,
 	   Document document, PdfWriter writer, HttpServletRequest request,
 	   HttpServletResponse response) throws Exception {
-		Employee employee = (Employee) model.get("command");
+
+		String str = (String) model.get("command");
 		
 		Paragraph header = new Paragraph(new Chunk("Kanban User Activity Report",FontFactory.getFont(FontFactory.HELVETICA, 18)));
-		Paragraph by = new Paragraph(new Chunk("Author " + employee.getFirstName() + " " + employee.getLastName(),FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		Paragraph by = new Paragraph(new Chunk("Report Data:  " + str ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
 			  
 		document.add(header);
 		document.add(by);
