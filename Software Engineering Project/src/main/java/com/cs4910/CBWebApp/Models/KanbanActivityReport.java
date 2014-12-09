@@ -171,7 +171,7 @@ public class KanbanActivityReport {
 			report += t.getName() + "  ";
 		}
 		
-		report += "Date Range: " + startDate.toString() + " to " + endDate.toString() + "<br /><br />";
+		report += "Date Range: " + startDate.toString().replaceAll("00:00:00 CST ", "") + " to " + endDate.toString().replaceAll("00:00:00 CST ", "") + "<br /><br />";
 		
 		for(BacklogItemStatus status : statusType) 
 		{
