@@ -20,9 +20,9 @@ public class UserActivityReport {
 	Boolean includeDetails;
 	Date startDate, endDate;
 	
-	public enum Day
+	 enum Day
 	 {
-	     Dec, Nov, Oct, Feb, Mar, Apr, May, Jun, Jul, Aug ;//Default is Jan no listing it.
+	     Dec, Nov, Oct, Feb, Mar, Apr, May, Jun, Jul, Aug //Default is Jan no listing it.
 	 }
 	
 	
@@ -156,7 +156,7 @@ public class UserActivityReport {
 					changedDate += "08/";
 					break;
 				default:
-					changedDate += "01/";
+					changedDate += "01/";;
 						
 			}
 			
@@ -219,7 +219,7 @@ public class UserActivityReport {
 		
 		for(ArrayList<RevisionInfo> ed : eachDay)
 		{
-			report+= ed.get(0).getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + ed.size() + " updates in X";		
+			report+= ed.get(0).getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + ed.size() + " updates in X" + "<br />";		
 			
 			
 //			
@@ -232,6 +232,14 @@ public class UserActivityReport {
 //			}
 		}
 		
+		report += "Number of Days: " + eachDay.size() + "<br />";
+		
+		int numberOfUpdates = 0;
+		for(ArrayList<RevisionInfo> ed : eachDay)
+		{
+			numberOfUpdates = ed.size();
+		}
+		report += "Number of Updates: " + numberOfUpdates + "<br />";
 		
 		return report;
 	}
