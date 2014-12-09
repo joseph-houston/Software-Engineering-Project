@@ -142,7 +142,7 @@ public class ReportsController {
 			@RequestParam(value = "startDate", required = false) String startDate,
 			@RequestParam(value = "endDate", required = false) String endDate) {
 		logger.debug("Generating User Activity Report");
-		
+
 		// Test your report generation here and print your outputs to console for now.
 		
 		

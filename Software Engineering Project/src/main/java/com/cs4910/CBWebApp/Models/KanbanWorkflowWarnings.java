@@ -38,34 +38,69 @@ public class KanbanWorkflowWarnings {
 		List<BacklogItem> backlogItems = apiService.getBacklogItemsInProduct(selectedProduct.getId(), false);
 		List<Release> releasesForProduct = apiService.getReleasesForProduct(selectedProduct.getId());
 		//List<Theme> themesForProduct = apiService.getThemesForProduct(selectedProduct.getId());
+		List<Task> tasksForProduct = apiService.getTasksForProduct(selectedProduct.getId());
 		
 		Date today = new Date();
 		String releaseName;
 		Date releaseDate = new Date();
+		int numSelected = 0, numInProgress = 0, numImpeded = 0, numUncommited = 0;
 		
-		for(BacklogItemStatus s : customStatuses) {		
-			result += "<strong>Workflow: " + s.getName() + "</strong><br>\n";
-			for(BacklogItem b : backlogItems){
-				if(b.getStatusId() == s.getId()){
-					// get name and increment count for this item
-					// get b.endDate and do a check to satisfy the statement below
-					result +=  b.getName() + " is past release date - ";		
-					for(Release r : releasesForProduct){
-						if(r.getId().equals(b.getReleaseId())){
-							releaseName = r.getName();
-							releaseDate = r.getEndDate();
-							result +="Release Date: " + releaseDate + " Release: " + releaseName + " Theme(s): ";
+		for(BacklogItemStatus s : customStatuses) {	
+			if(s.getName().equalsIgnoreCase("done") || s.getName().equalsIgnoreCase("not started")){
+				result += "";
+			} else {
+				result += "<h4>Workflow: " + s.getName() + "</h4>";	
+				for(BacklogItem b : backlogItems){
+					if(b.getStatusId() == s.getId()){
+						if(s.getName().equalsIgnoreCase("selected"))
+							numSelected += 1;
+						if(s.getName().equalsIgnoreCase("in progress"))
+							numInProgress += 1;
+						if(s.getName().equalsIgnoreCase("impeded"))
+							numImpeded += 1;
+						if(s.getName().equalsIgnoreCase("uncommited"))
+							numUncommited += 1;												
+						for(Release r : releasesForProduct){
+							if(r.getId().equals(b.getReleaseId())){
+								releaseName = r.getName();
+								releaseDate = r.getEndDate();
+								if(releaseDate.before(today)){
+									result +=  b.getName() + " is past release date - ";
+									result +="Release Date: " + releaseDate + " Release: " + releaseName + " Theme(s): ";
+									if(b.getThemes().size() == 0)
+										result += "None";
+									for(Theme t : b.getThemes()) {
+										result += t.getName() + ", ";
+									}									
+								}
+							}	
 						}
-						for(Theme t : b.getThemes()) {
-							result += t.getName() + ", ";
-						}
-						
+
+						//result += " Date Request: " + b.;
+						result += "<br>";
 					}
-					result += "<br>";
 				}
+
+				if(s.getName().equalsIgnoreCase("selected") && numSelected > 2)
+					result +=  "<span class='text-warning'>WARNING</span> - Capacity exceeded in Selected Workflow(max capacity currently set at 15).";
+				if(s.getName().equalsIgnoreCase("in progress") && numInProgress > 4)
+					result +=  "<span class='text-warning'>WARNING</span> - Capacity exceeded in In Progress Workflow(max capacity currently set at 15).";
+				if(s.getName().equalsIgnoreCase("impeded") && numImpeded > 2)
+					result +=  "<span class='text-warning'>WARNING</span> - Capacity exceeded in Impeded Workflow(max capacity currently set at 5). " + numImpeded;
+				if(s.getName().equalsIgnoreCase("uncommited") && numUncommited > 4)
+					result +=  "<span class='text-warning'>WARNING</span> - Capacity exceeded: ";			
 				
+				if(s.getName().equalsIgnoreCase("selected") && numSelected == 0)
+					result +=  "Nothing to show.";
+				if(s.getName().equalsIgnoreCase("in progress") && numInProgress == 0)
+					result +=  "Nothing to show.";
+				if(s.getName().equalsIgnoreCase("impeded") && numImpeded == 0)
+					result +=  "Nothing to show.";
+				if(s.getName().equalsIgnoreCase("uncommited") && numUncommited == 0)
+					result +=  "Nothing to show.";					
 			}
-			result += "<br>";
+
+			
 			/* for now...
 			result += "<ul>";
 			result += "<li>";
@@ -86,9 +121,6 @@ public class KanbanWorkflowWarnings {
 			System.out.println(s.getName());
 		}
 		System.out.println();
-		if (result.equals("")){
-			result += "Nothing to display for this workflow.";
-		}
 		return result;
 	}
 		
