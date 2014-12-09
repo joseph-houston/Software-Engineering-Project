@@ -52,7 +52,11 @@ CBWebApp.dateUtility = function() {
 CBWebApp.setStartDate = function(action) {
 	$('#startDate').on('change', function(e){
 		CBWebApp.data.startDate = $('#startDate').val();
-		CBWebApp.submitData(action) 
+		if(CBWebApp.data.endDate == undefined){
+			$("#reportData").html("Select end date");
+		} else {
+			CBWebApp.submitData(action) 
+		}		
 		e.preventDefault();
 	});
 }
@@ -60,7 +64,11 @@ CBWebApp.setStartDate = function(action) {
 CBWebApp.setEndDate = function(action) {
 	$('#endDate').on('change', function(e){
 		CBWebApp.data.endDate = $('#endDate').val();
-		CBWebApp.submitData(action) 
+		if(CBWebApp.data.startDate == undefined){
+			$("#reportData").html("Select start date");
+		} else {
+			CBWebApp.submitData(action) 
+		}
 		e.preventDefault();
 	});	
 }
@@ -76,7 +84,7 @@ CBWebApp.submitData = function(action) {
 		error: function(e) {
 			console.log("Error: " + e)
 		}
-	});		
+	});	
 }
 
 CBWebApp.getFormData = function(){
