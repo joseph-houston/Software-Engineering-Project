@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cs4910.CBWebApp.Models.KanbanActivityReport;
 import com.cs4910.CBWebApp.Models.KanbanWorkflowWarnings;
 import com.cs4910.CBWebApp.Models.ReportScheduler;
+import com.cs4910.CBWebApp.Models.UserActivityReport;
 import com.cs4910.CBWebApp.domain.DomainProduct;
 import com.cs4910.CBWebApp.domain.DomainTheme;
 import com.cs4910.CBWebApp.domain.DomainUser;
@@ -149,8 +150,8 @@ public class ReportsController {
 		// Test your report generation here and print your outputs to console for now.
 		
 		
-		return "Data submited: " + productName + " User Name: " + userName + " Include History: " +
-				includeDetails + " Start Date: " + startDate + " End Date: " + endDate;
+		UserActivityReport userReport = new UserActivityReport(productName, userName, includeDetails, startDate, endDate);
+		return userReport.toString();
 	}		
 	
 	/**
