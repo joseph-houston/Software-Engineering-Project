@@ -33,8 +33,8 @@
     <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <beans:property name="host" value="smtp.gmail.com" />
         <beans:property name="port" value="587" />
-        <beans:property name="username" value="email here" />
-        <beans:property name="password" value="password here" />
+        <beans:property name="username" value="" />
+        <beans:property name="password" value="" />
         <beans:property name="javaMailProperties">
             <beans:props>
                 <beans:prop key="mail.transport.protocol">smtp</beans:prop>
@@ -54,4 +54,10 @@
         </beans:property>
     </beans:bean>    	
 	-->
+	<!-- Configure task scheduler -->
+	  <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+	    <task:scheduler id="taskScheduler"/>
+	    <task:executor id="taskExecutor" pool-size="1"/>
+	    <task:annotation-driven executor="taskExecutor" scheduler="taskScheduler"/>
+	  </beans>
 </beans:beans>
