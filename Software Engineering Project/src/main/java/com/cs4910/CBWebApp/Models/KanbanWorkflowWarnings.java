@@ -72,6 +72,8 @@ public class KanbanWorkflowWarnings
 	}
 	
 	public String display(){
+	//@Override
+	//public String toString(){
 		String result = "";
 		List<BacklogItemStatus> statusList = getStatusList();
 		List<BacklogItem> selectedItems = getBacklogItemsForStatus(statusList, "Selected");
@@ -96,7 +98,7 @@ public class KanbanWorkflowWarnings
 		Date today = new Date();
 		List<Theme> themeList = new ArrayList<Theme>();
 		
-		report += "\nWorkflow: Selected\n";
+		report += "<br />Workflow: Selected<br />";
 		
 		for(BacklogItem b : selectedItems)
 		{
@@ -104,34 +106,34 @@ public class KanbanWorkflowWarnings
 			{
 				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 				{
-					report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 				
 				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 				{
-					report += "\\\t" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 			}
 		}
 		
 		if(selectedItems.size() > 15)
-			report += "\\tTask Capacity Exceeded in Selected Workflow (max capacity currently set at 15)\n";
+			report += "&#09Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)<br />";
 		
 		return report;
 	}
@@ -142,7 +144,7 @@ public class KanbanWorkflowWarnings
 		Date today = new Date();
 		List<Theme> themeList = new ArrayList<Theme>();
 		
-		report += "\nWorkflow: In Progress\n";
+		report += "<br />Workflow: In Progress<br />";
 		
 		for(BacklogItem b : inProgressItems)
 		{
@@ -150,34 +152,34 @@ public class KanbanWorkflowWarnings
 			{
 				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 				{
-					report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 				
 				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
 				{
-					report += "\\\t" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 			}
 		}
 		
 		if(inProgressItems.size() > 15)
-			report += "\\tTask Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)\n";
+			report += "&#09Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)<br />";
 		
 		return report;
 	}
@@ -188,7 +190,7 @@ public class KanbanWorkflowWarnings
 		Date today = new Date();
 		List<Theme> themeList = new ArrayList<Theme>();
 		
-		report += "\nWorkflow: Impeded\n";
+		report += "<br />Workflow: Impeded<br />";
 		
 		for(BacklogItem b : impededItems)
 		{
@@ -196,34 +198,34 @@ public class KanbanWorkflowWarnings
 			{
 				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 				{
-					report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 				
 				if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 				{
-					report += "\\\t" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
+					report += "&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
 					themeList = b.getThemes();
 					for(Theme t : themeList)
 					{
 						report += t.getName() + " ";
 					}
-					report += "\n";
+					report += "<br />";
 				}
 				
 			}
 		}
 		
 		if(impededItems.size() > 5)
-			report += "\\tTask Capacity Exceeded in Impeded Workflow (max capacity currently set at 5)\n";
+			report += "&#09Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 5)<br />";
 		
 		
 		return report;
@@ -234,20 +236,20 @@ public class KanbanWorkflowWarnings
 		String report = "";
 		Date today = new Date();
 		
-		report += "\nWorkflow: Uncommitted\n";
+		report += "<br />Workflow: Uncommitted<br />";
 		for(BacklogItem b : uncommittedItems)
 		{
 			for(Release r : releaseList)
 			{
 				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today) && r.isArchived() == false)
 				{
-					report += "\\tVerify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "\n";
+					report += "&#09Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "<br />";
 				}
 				
 				if(b.getReleaseId() == r.getId() && 
 				  (r.getEndDate().getTime()/ (24 * 60 * 60 * 1000))  >  ((today.getTime()/ (24 * 60 * 60 * 1000)) + b.getEstimate()) )
 				{
-					report += "\\tWarning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"\n";
+					report += "&#09Warning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"<br />";
 				}
 			}
 		}
@@ -346,7 +348,7 @@ public class KanbanWorkflowWarnings
 				}
 			}
 			
-			report += "Workflow: Selected\n";
+			report += "Workflow: Selected<br />";
 			
 			for(BacklogItem b : selectedBacklogItem)
 			{
@@ -354,38 +356,38 @@ public class KanbanWorkflowWarnings
 				{
 					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 					{
-						report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 					
 					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 					{
-						report += "\\\t" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 				}
 			}
 			
 			if(selectedBacklogItem.size() > 15)
-				report += "\\tTask Capacity Exceeded in Selected Workflow (max capacity currently set at 15)\n";
+				report += "&#09Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)<br />";
 			
 			
 			
-			report += "\nWorkflow: In Progress\n";
+			report += "<br />Workflow: In Progress<br />";
 			
 			for(BacklogItem b : inProgressBacklogItem)
 			{
@@ -393,38 +395,38 @@ public class KanbanWorkflowWarnings
 				{
 					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 					{
-						report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 					
 					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
 					{
-						report += "\\\t" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 				}
 			}
 			
 			if(inProgressBacklogItem.size() > 15)
-				report += "\\tTask Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)\n";
+				report += "&#09Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)<br />";
 
 			
 			
-			report += "\nWorkflow: Impeded\n";
+			report += "<br />Workflow: Impeded<br />";
 			
 			for(BacklogItem b : impededBacklogItem)
 			{
@@ -432,50 +434,50 @@ public class KanbanWorkflowWarnings
 				{
 					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
 					{
-						report += "\\\t" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 					
 					if(b.getReleaseId() == r.getId() && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
 					{
-						report += "\\\t" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
+						report += "\&#09" + b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString() +
 								  "Release: " + r.getName() + " - Themes: ";
 						themeList = b.getThemes();
 						for(Theme t : themeList)
 						{
 							report += t.getName() + " ";
 						}
-						report += "\n";
+						report += "<br />";
 					}
 					
 				}
 			}
 			
 			if(impededBacklogItem.size() > 15)
-				report += "\\tTask Capacity Exceeded in Impeded Workflow (max capacity currently set at 15)\n";
+				report += "&#09Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 15)<br />";
 
 			
-			report += "\nWorkflow: Uncommitted\n";
+			report += "<br />Workflow: Uncommitted<br />";
 			for(BacklogItem b : uncommittedBacklogItem)
 			{
 				for(Release r : releaseList)
 				{
 					if(b.getReleaseId() == r.getId() && r.getEndDate().before(today) && r.isArchived() == false)
 					{
-						report += "\\tVerify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "\n";
+						report += "&#09Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "<br />";
 					}
 					
 					if(b.getReleaseId() == r.getId() && 
 					  (r.getEndDate().getTime()/ (24 * 60 * 60 * 1000))  >  ((today.getTime()/ (24 * 60 * 60 * 1000)) + b.getEstimate()) )
 					{
-						report += "\\tWarning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"\n";
+						report += "&#09Warning - Release " + r.getId().toString() + " - " + r.getName() + " has uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString() +"<br />";
 					}
 				}
 			}

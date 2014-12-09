@@ -19,7 +19,7 @@ public class UserActivityReport {
 	Boolean includeDetails;
 	Date startDate, endDate;
 	
-	public UserActivityReport(String selectedProduct, String selectedUser, String includeDetails, String startDate, String endDate)
+	public UserActivityReport(String selectedProduct, String selectedUser, Boolean includeDetails, String startDate, String endDate)
 	{
 		try {
 			this.selectedProduct = apiService.getProductByName(selectedProduct);
@@ -36,10 +36,7 @@ public class UserActivityReport {
 		}
 		
 		
-		if(includeDetails.toLowerCase() == "true")
-			this.includeDetails = true;
-		else
-			this.includeDetails = false;
+		this.includeDetails = includeDetails;
 		
 		Date date = new Date();
 		try {
@@ -101,7 +98,7 @@ public class UserActivityReport {
 		
 		System.out.print(usersRevisionInfo.get(0).getTimeStamp().toString());
 		report += "User Activity for " + selectedUser.getUserName() + " from " + 
-				  startDate.toString() + " to " + endDate.toString() + "\n";
+				  startDate.toString().replaceAll("00:00:00 CST ", "") + " to " + endDate.toString().replaceAll("00:00:00 CST ", "") + "<br />";
 		
 		
 		return report;
