@@ -104,7 +104,7 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
+				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
 				{
 					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
@@ -150,7 +150,7 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
+				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
 				{
 					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
@@ -196,7 +196,7 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today))
+				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today))
 				{
 					report += "&#09" + b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString() +
 							  "Release: " + r.getName() + " - Themes: ";
@@ -241,7 +241,7 @@ public class KanbanWorkflowWarnings
 		{
 			for(Release r : releaseList)
 			{
-				if(b.getReleaseId() == r.getId() && r.getEndDate().before(today) && r.isArchived() == false)
+				if(b.getReleaseId() == r.getId() && r.getEndDate().after(today) && r.isArchived() == false)
 				{
 					report += "&#09Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString() + "<br />";
 				}
