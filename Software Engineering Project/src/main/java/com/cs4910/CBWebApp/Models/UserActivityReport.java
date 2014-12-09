@@ -96,7 +96,7 @@ public class UserActivityReport {
 			if(rInfo.getUserName().equals("administrator"))
 			{
 				usersRevisionInfo.add(rInfo);
-				System.out.println("Activates");
+				System.out.println("Activate");
 				System.out.println(usersRevisionInfo.get(i).getTimeStamp());
 				i++;
 			}
