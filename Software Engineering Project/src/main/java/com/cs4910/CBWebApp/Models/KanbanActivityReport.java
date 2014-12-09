@@ -177,7 +177,6 @@ public class KanbanActivityReport {
 		{
 			for(BacklogItem backlog : backlogList) 
 			{
-				System.out.println(backlog.getName());
 				//Backlog matches a status & matches one of the selected themes.
 				if(backlog.getStatusId().equals(status.getId())) 
 					{
@@ -209,6 +208,7 @@ public class KanbanActivityReport {
 					
 					}
 			}
+			
 		}
 		
 		

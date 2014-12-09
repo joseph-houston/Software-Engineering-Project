@@ -71,6 +71,7 @@ public class UserActivityReport {
 		List<BacklogItemChanges> backlogItemChanges = new ArrayList<BacklogItemChanges>();
 		for(DashboardReleaseStatistics d : dash)
 		{
+
 			try {
 				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 0).getBacklogItemChanges();
 			} catch (ScrumWorksException e) {
@@ -82,21 +83,25 @@ public class UserActivityReport {
 		List<RevisionInfo> revisionInfo = new ArrayList<RevisionInfo>();
 		for(BacklogItemChanges b : backlogItemChanges)
 		{
+			
 			revisionInfo.add(b.getRevisionInfo());
 		}
 		
-		
+		int i = 0;
 		List<RevisionInfo> usersRevisionInfo = new ArrayList<RevisionInfo>();
 		for(RevisionInfo rInfo : revisionInfo)
 		{
-			if(rInfo.getUserName() == selectedUser.getUserName())
+			System.out.println("Step 1");
+			System.out.println(rInfo.getUserName() + " " + selectedUser.getUserName());
+			if(rInfo.getUserName().equals("administrator"))
 			{
 				usersRevisionInfo.add(rInfo);
+				System.out.println("Activates");
+				System.out.println(usersRevisionInfo.get(i).getTimeStamp());
+				i++;
 			}
 		}
 		
-		
-		System.out.print(usersRevisionInfo.get(0).getTimeStamp().toString());
 		report += "User Activity for " + selectedUser.getUserName() + " from " + 
 				  startDate.toString().replaceAll("00:00:00 CST ", "") + " to " + endDate.toString().replaceAll("00:00:00 CST ", "") + "<br />";
 		
