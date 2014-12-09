@@ -71,7 +71,7 @@ public class KanbanWorkflowWarnings {
 										result += "None";
 									for(Theme t : b.getThemes()) {
 										result += t.getName() + ", ";
-									}									
+									}
 								}
 							}	
 						}
@@ -99,28 +99,7 @@ public class KanbanWorkflowWarnings {
 				if(s.getName().equalsIgnoreCase("uncommited") && numUncommited == 0)
 					result +=  "Nothing to show.";					
 			}
-
-			
-			/* for now...
-			result += "<ul>";
-			result += "<li>";
-				result += "Past release date<br>";
-				result += "Release Name - Themes: ";
-			result += "</li>";
-			
-			result += "<li>";
-				result += "In workflow for x days <br>";
-				result += "Release Name - Themes: ";
-			result += "</li>";			
-			
-			result += "<li>";
-				result += "<span class='text-warning'>WARNING</span> - Capacity exceeded";
-			result += "</li>";			
-			result += "</ul>";
-			*/
-			System.out.println(s.getName());
 		}
-		System.out.println();
 		return result;
 	}
 		
