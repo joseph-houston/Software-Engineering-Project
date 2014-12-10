@@ -246,23 +246,33 @@ public class UserActivityReport {
 		int oldDate = usersRevisionInfo.get(0).getTimeStamp().getDate();
 		int oldMonth = usersRevisionInfo.get(0).getTimeStamp().getMonth() + 1;
 		int oldYear = usersRevisionInfo.get(0).getTimeStamp().getYear() + 1900;
-		
-		int updateCount=0;
+		String report_append = "";
+		int updateCount=1;
 		
 		for(RevisionInfo uRI : usersRevisionInfo)
 		{
 			date = uRI.getTimeStamp().getDate();
 			month = uRI.getTimeStamp().getMonth() + 1;
 			year = uRI.getTimeStamp().getYear() + 1900;
+
 			System.out.println(date + " " + oldDate);
-			if(date == oldDate && month == oldMonth && year == oldYear){
+			if(date == oldDate && month == oldMonth && year == oldYear && usersRevisionInfo.get(0).getRevisionNumber() != uRI.getRevisionNumber()){
 				updateCount++;
+				report_append = month + "/" + date + "/" + year + " - " + updateCount + " updates in X" + "<br />";
 			}
 			else{
-				report += month + "/" + date + "/" + year + " - " + updateCount + " updates in X" + "<br />";
+				if(usersRevisionInfo.get(1).getRevisionNumber() != uRI.getRevisionNumber()){
+						report += report_append;
+						report += month + "/" + date + "/" + year + " - " + updateCount + " updates in X" + "<br />";
+				}
 				oldDate = date;
 				oldMonth = month;
 				oldYear = year;
+				if(usersRevisionInfo.get(1).getRevisionNumber() != uRI.getRevisionNumber())
+					updateCount = 0;
+				else
+					updateCount = 1;
+				report_append = "";
 			}
 		}
 		
