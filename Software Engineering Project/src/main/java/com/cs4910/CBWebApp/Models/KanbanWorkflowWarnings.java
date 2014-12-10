@@ -265,6 +265,276 @@ public class KanbanWorkflowWarnings
 		report += "</ul>";
 		return report;
 	}
+	
+	
+	
+	
+	
+	
+	
+	public String[] displayPDF(){
+		//@Override
+		//public String toString(){
+			String[] result1, result2, result3, result4;
+			String[] resultAll;
+			int resultIndex = 0;
+			List<BacklogItemStatus> statusList = getStatusList();
+			List<BacklogItem> selectedItems = getBacklogItemsForStatus(statusList, "Selected");
+			List<BacklogItem> inProgressItems = getBacklogItemsForStatus(statusList, "In Progress");
+			List<BacklogItem> impededItems = getBacklogItemsForStatus(statusList, "Impeded");
+			List<BacklogItem> UncommittedItems= getBacklogItemsForStatus(statusList, "Uncommitted");
+			
+			List<Release> releaseList = getReleaseList();
+			
+			result1 = selectedReportPDF(selectedItems,releaseList);
+			result2 = inProgressReportPDF(inProgressItems,releaseList);
+			result3 = impededReportPDF(impededItems,releaseList);
+			result4 = umcommittedReportPDF(UncommittedItems,releaseList);
+			resultAll = new String[result1.length + result2.length + result3.length + result4.length];
+			
+			for(String s : selectedReportPDF(selectedItems,releaseList))
+			{
+				resultAll[resultIndex++] = s;
+			}
+			
+			for(String s :inProgressReportPDF(inProgressItems,releaseList) )
+			{
+				resultAll[resultIndex++] = s;
+			}
+			
+			for(String s : impededReportPDF(impededItems,releaseList))
+			{
+				resultAll[resultIndex++] = s;
+			}
+			
+			for(String s : umcommittedReportPDF(UncommittedItems,releaseList))
+			{
+				resultAll[resultIndex++] = s;
+			}
+			
+				
+			return resultAll;
+		}
+			
+			
+		public String[] selectedReportPDF(List<BacklogItem> selectedItems, List<Release> releaseList)
+		{
+			String[] report;
+			List<String> reportPDF = new ArrayList<String>();
+			String temp = "";
+			int index = 0;
+			Date today = new Date();
+			List<Theme> themeList = new ArrayList<Theme>();
+			
+			reportPDF.add("Workflow: Selected");
+			
+			for(BacklogItem b : selectedItems)
+			{
+				for(Release r : releaseList)
+				{
+					if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add(b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: " + temp); 
+						reportPDF.add("");
+					}
+					
+					
+					if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add(b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: " + temp);
+						reportPDF.add("");
+					}
+					
+				}
+			}
+			
+			if(selectedItems.size() > 15)
+				reportPDF.add("Task Capacity Exceeded in Selected Workflow (max capacity currently set at 15)");
+			else
+				reportPDF.add("");
+			
+			report = new String[reportPDF.size()];
+			for(String s : reportPDF)
+			{
+				report[index++]= s;
+			}
+			
+			return report;
+		}
+		
+		public String[] inProgressReportPDF(List<BacklogItem> inProgressItems, List<Release> releaseList)
+		{
+			String[] report;
+			List<String> reportPDF = new ArrayList<String>();
+			String temp = "";
+			int index = 0;
+			Date today = new Date();
+			List<Theme> themeList = new ArrayList<Theme>();
+			
+			reportPDF.add("Workflow: In Progress");
+			
+			for(BacklogItem b : inProgressItems)
+			{
+				for(Release r : releaseList)
+				{
+					if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add( b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: ");
+						reportPDF.add("");
+					}
+					
+					
+					if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 10)
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add(b.getName() + ", in workflow longer than specified (10) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: ");
+						
+						reportPDF.add("");
+					}
+					
+				}
+			}
+			
+			if(inProgressItems.size() > 15)
+				reportPDF.add("Task Capacity Exceeded in In Progress Workflow (max capacity currently set at 15)");
+			else
+				reportPDF.add("");
+			
+			report = new String[reportPDF.size()];
+			for(String s : reportPDF)
+			{
+				report[index++]= s;
+			}
+			
+			return report;
+		}
+		
+		public String[] impededReportPDF(List<BacklogItem> impededItems, List<Release> releaseList)
+		{
+			String[] report;
+			List<String> reportPDF = new ArrayList<String>();
+			String temp = "";
+			int index = 0;
+			Date today = new Date();
+			List<Theme> themeList = new ArrayList<Theme>();
+			
+			reportPDF.add("Workflow: Impeded");
+			
+			for(BacklogItem b : impededItems)
+			{
+				for(Release r : releaseList)
+				{
+					if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today))
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add(b.getName() + " is past release date. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: ");
+						
+						reportPDF.add("");
+					}
+					
+					
+					if(b.getReleaseId().equals(r.getId()) && (r.getStartDate().getTime() - today.getTime() / (24 * 60 * 60 * 1000)) > 5)
+					{
+						temp = "";
+						themeList = b.getThemes();
+						for(Theme t : themeList)
+						{
+							temp += t.getName() + ", ";
+						}
+						reportPDF.add(b.getName() + ", in workflow longer than specified (5) days. - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", "") +
+								  " Release: " + r.getName() + " - Themes: ");
+						
+						reportPDF.add("");
+					}
+					
+				}
+			}
+			
+			if(impededItems.size() > 5)
+				reportPDF.add("Task Capacity Exceeded in Impeded Workflow (max capacity currently set at 5)");
+			else
+				reportPDF.add("");
+			
+			report = new String[reportPDF.size()];
+			for(String s : reportPDF)
+			{
+				report[index++]= s;
+			}
+			
+			return report;
+		}
+		
+		public String[] umcommittedReportPDF(List<BacklogItem> UncommittedItems, List<Release> releaseList)
+		{
+			String[] report;
+			List<String> reportPDF = new ArrayList<String>();
+			int index = 0;
+			Date today = new Date();
+			
+			reportPDF.add("Workflow: Uncommitted");
+			for(BacklogItem b : UncommittedItems)
+			{
+				for(Release r : releaseList)
+				{
+					if(b.getReleaseId().equals(r.getId()) && r.getEndDate().before(today) && r.isArchived() == false)
+					{
+						reportPDF.add("Verify release date for " + r.getName() + " since it has uncompleted tasks - Release date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", ""));
+					}
+					
+					if(b.getReleaseId().equals(r.getId()) && 
+					  (r.getEndDate().getTime()/ (24 * 60 * 60 * 1000))  >  ((today.getTime()/ (24 * 60 * 60 * 1000)) + b.getEstimate()) )
+					{
+						reportPDF.add("Warning - Release " + r.getId().toString() + " - " + r.getName() + " has Uncommitted work that may not be completed - Release Date: " + r.getEndDate().toString().replaceAll("00:00:00 CST ", ""));
+					}
+				}
+			}
+			reportPDF.add("");
+			
+			report = new String[reportPDF.size()];
+			for(String s : reportPDF)
+			{
+				report[index++]= s;
+			}
+			return report;
+		}
+	
+	
+	
+	
+	
 }
 
 

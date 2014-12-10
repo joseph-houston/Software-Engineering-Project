@@ -214,4 +214,169 @@ public class KanbanActivityReport {
 		
 		return report;
 	}
+	
+	
+	
+	
+	
+	
+	
+public String[] toStringPDF(){
+		String[] report;
+		List<String> reportPDF = new ArrayList<String>();
+		int reportIndex = 0;
+		String temp = "";
+	
+		//Get Initial dash based on inputed dates. 
+		List<DashboardReleaseStatistics> dash = new ArrayList<DashboardReleaseStatistics>();
+		try {
+			dash = apiService.getDashboardStatistics(selectedProduct.getId(), startDate, endDate);
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		//Start object translation Dash -> BacklogItem 
+		List<BacklogItem> backlogList = new ArrayList<BacklogItem>();
+		for(DashboardReleaseStatistics d : dash)
+		{
+			try {
+				backlogList.addAll(apiService.getBacklogItemsForReleaseInProduct(d.getRelease().getId(), selectedProduct.getId(), false));
+			} catch (ScrumWorksException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		//BacklogItem -> Sort by selected themes
+		List<BacklogItem> tempBacklogList = new ArrayList<BacklogItem>();
+		for(BacklogItem b: backlogList)
+		{
+			for(Theme t: b.getThemes() )
+			{
+				for(Theme s : selectedTheme)
+				{
+					if(t.getName().equals(s.getName()))
+					{
+						if(tempBacklogList.contains(b)){
+						//do nothing
+						}
+						else{ //add b to tempBacklogList
+							tempBacklogList.add(b);
+						}
+					}
+				}
+			}
+		}
+		backlogList = tempBacklogList;
+		
+		
+		//Get customs statuses.
+		List<BacklogItemStatus> statusType = new ArrayList<BacklogItemStatus>();
+		try {
+			statusType = apiService.getCustomBacklogItemStatuses(selectedProduct.getId());
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*Started backlog History - Incomplete
+		 * //Pulls data needed for backlog History if requested.
+		if(includeHistory)
+		{
+			List<RevisionInfo> revisionInfo = new ArrayList<RevisionInfo>();
+			List<BacklogItemChanges> backlogChanges = new ArrayList<BacklogItemChanges>();
+			List<BacklogItem> backlogWithChange = new ArrayList<BacklogItem>();
+			
+			try {
+				backlogChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 0).getBacklogItemChanges();
+				
+				
+			} catch (ScrumWorksException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			for(BacklogItemChanges bc : backlogChanges)
+				{
+					for(BacklogItem changedB : bc.getAddedOrChangedEntities())
+					{
+						for(BacklogItem b : backlogList)
+						{
+							if(changedB.equals(b))
+							{
+								backlogWithChange.add(b);
+								revisionInfo.add(bc.getRevisionInfo());
+							}
+						}
+					}
+					
+					
+				}
+		}*/
+		
+		
+		//Title
+		reportPDF.add("Product: " + selectedProduct.getName());  		  
+		
+		temp = "";
+		for(Theme t : selectedTheme){
+			temp += t.getName() + "  ";
+		}
+		reportPDF.add("Themes: " + temp);
+		
+		reportPDF.add("Date Range: " + startDate.toString().replaceAll("00:00:00 CST ", "") + " to " + endDate.toString().replaceAll("00:00:00 CST ", ""));
+		
+		for(BacklogItemStatus status : statusType) 
+		{
+			for(BacklogItem backlog : backlogList) 
+			{
+				//Backlog matches a status & matches one of the selected themes.
+				if(backlog.getStatusId().equals(status.getId())) 
+					{
+						temp = "";
+						for(Theme th : backlog.getThemes())
+						{
+							temp += th.getName() + " ";
+						}
+						reportPDF.add("Workflow: " + status.getName());  
+						
+						reportPDF.add("Title: " + backlog.getName() +" for " + temp+ "Description: " + backlog.getDescription());
+									
+								
+						for(DashboardReleaseStatistics d : dash)
+						{
+							if(d.getRelease().getId().equals(backlog.getReleaseId()))
+							{
+								reportPDF.add("Realease: " + d.getRelease().getName() );
+							}
+						}
+							
+						reportPDF.add("Effort: " + backlog.getEstimate());
+					
+						/*//Unfinished - Change History for each backlogItem.
+						if(includeHistory)
+						{
+										
+						}*/
+					
+					}
+			}
+			
+		}
+		report = new String[reportPDF.size()];
+		for(String s : reportPDF)
+		{
+			report[reportIndex++]= s;
+		}
+		
+		return report;
+	}
+	
+	
+	
+	
 }

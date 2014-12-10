@@ -80,7 +80,7 @@ public class UserActivityReport {
 		{
 
 			try {
-				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 30).getBacklogItemChanges();
+				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 1).getBacklogItemChanges();
 			} catch (ScrumWorksException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -239,7 +239,7 @@ public class UserActivityReport {
 //				//includeDetails here on each specific day.
 //			}
 //		}
-		
+		try{
 		int date;
 		int month;
 		int year;
@@ -258,12 +258,13 @@ public class UserActivityReport {
 			System.out.println(date + " " + oldDate);
 			if(date == oldDate && month == oldMonth && year == oldYear && usersRevisionInfo.get(0).getRevisionNumber() != uRI.getRevisionNumber()){
 				updateCount++;
-				report_append = month + "/" + date + "/" + year + " - " + updateCount + " updates in X" + "<br />";
+				report_append = month + "/" + date + "/" + year + " - " + updateCount + " updates in " +apiService.getTeamById(selectedProduct.getTeamIds().get(0)).getType()  + "<br />";
+
 			}
 			else{
 				if(usersRevisionInfo.get(1).getRevisionNumber() != uRI.getRevisionNumber()){
 						report += report_append;
-						report += month + "/" + date + "/" + year + " - " + updateCount + " updates in X" + "<br />";
+						report += month + "/" + date + "/" + year + " - " + updateCount + " updates in "+ apiService.getTeamById(selectedProduct.getTeamIds().get(0)).getType()+ "<br />";
 				}
 				oldDate = date;
 				oldMonth = month;
@@ -275,7 +276,10 @@ public class UserActivityReport {
 				report_append = "";
 			}
 		}
-		
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		report += "Number of Days: " + usersRevisionInfo.size() + "<br />";
 		

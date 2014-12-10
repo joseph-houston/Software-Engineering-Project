@@ -33,7 +33,7 @@ import com.danube.scrumworks.api2.client.*;
 /**
  * @author Njenga Gathee
  * 
- * This Controller is a backend controller. It handles all the request made vial ajax on the 
+ * This Controller is a backend controller. It handles all the request made via ajax on the 
  * report page.
  */
 @Controller

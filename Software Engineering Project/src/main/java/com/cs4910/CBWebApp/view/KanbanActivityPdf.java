@@ -21,7 +21,7 @@ public class KanbanActivityPdf extends AbstractPdfView {
 
 		KanbanActivityReport kanbanReport =   (KanbanActivityReport) model.get("command");
 		Paragraph header = new Paragraph(new Chunk("Kanban Activity Report",FontFactory.getFont(FontFactory.HELVETICA, 18)));
-		Paragraph by = new Paragraph(new Chunk("Report Data: " + kanbanReport.toString() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		Paragraph by = new Paragraph(new Chunk("Report Data: " + kanbanReport.toStringPDF() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
 			  
 		document.add(header);
 		document.add(by);
