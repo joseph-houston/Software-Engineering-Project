@@ -174,24 +174,15 @@ public class ReportsController {
 	public @ResponseBody String scheduleEmail(@RequestParam String product, @RequestParam String email,
 										HttpServletRequest request) throws IOException{
 		String result = "Product: " + product + " Email: " + email;
-		System.out.println(result);
-		//String dataPath  = request.getSession().getServletContext().getRealPath("/WEB-INF/data/emails.dat");
-		
+		System.out.println(result);		
 		File dataPath = new File( servletContext.getRealPath("/WEB-INF/data/emails.dat") );
-		
-		System.out.println(dataPath);
-		
-		
-		System.out.println(dataPath);
 		String record = product + ":" + email;
 		
 		ReportScheduler.storeScheduleRecord(dataPath, record);
-		//ReportScheduler.readScheduleRecords(dataPath);
-
 		return result;
 	}
 	
-	 @Scheduled(cron="*/20 * * * * ?")
+	 //@Scheduled(cron="*/20 * * * * ?")
 	 public void sendReport() throws ScrumWorksException, IOException {	
 		 	List<String> scheduleRecords = new ArrayList<String>();
 		 	File dataPath = new File( servletContext.getRealPath("/WEB-INF/data/emails.dat") );
