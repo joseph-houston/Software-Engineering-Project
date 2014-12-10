@@ -78,7 +78,8 @@ public class UserActivityReport {
 		List<BacklogItemChanges> backlogItemChanges = new ArrayList<BacklogItemChanges>();
 		for(DashboardReleaseStatistics d : dash)
 		{
-
+			//Since it is impossible using the current API to get any sort of revision id, I just put 1 in there, You will need to check your database and place the lowest revision id in there. 
+			//Look in the revisioninfo table in the ScrumWorks Database
 			try {
 				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 1).getBacklogItemChanges();
 			} catch (ScrumWorksException e) {
