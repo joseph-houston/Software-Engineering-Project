@@ -17,18 +17,29 @@ public class Mailer {
 
 	public void sendReports(){
 		// for each record, 
-			// get the project id,name from this file
-			// get the email from this file
-			// create a report object for the name/id above
-			// get the report email text and
-			// create a simple e-mail object
-    		SimpleMailMessage email = new SimpleMailMessage();
-    		email.setTo(recipientAddress);
-    		email.setSubject(subject);
-    		email.setText(message);
-     
-    		// send the e-mail
-    		mailSender.send(email);	
+		// get the project id,name from this file
+		// get the email from this file
+		// create a report object for the name/id above
+		// get the report email text and
+		// create a simple e-mail object
+		
+		recipientAddress = "gathenje@yahoo.com";
+		subject = "Testing scheduling and email";
+		message = "Oh! if you see this, smile!!:) this feature works!!!";
+		 
+		// prints debug info
+		System.out.println("To: " + recipientAddress);
+		System.out.println("Subject: " + subject);
+		System.out.println("Message: " + message);
+		 
+		// creates a simple e-mail object
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(recipientAddress);
+		email.setSubject(subject);
+		email.setText(message);
+		 
+		// sends the e-mail
+		mailSender.send(email);
 	}
 
 }

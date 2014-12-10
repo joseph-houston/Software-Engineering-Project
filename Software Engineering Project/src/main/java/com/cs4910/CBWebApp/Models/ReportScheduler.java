@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportScheduler {
-	public static void storeScheduleRecord(String path, String record) throws IOException {
-		File file = new File(path);
-		
+	public static void storeScheduleRecord(File file, String record) throws IOException {
 		if(!file.exists()){
 			file.createNewFile();
 		}
@@ -20,12 +20,15 @@ public class ReportScheduler {
 		writer.close();			
 	}
 	
-	public static void readScheduleRecords(String path) throws IOException {	
-		BufferedReader reader = new BufferedReader(new FileReader(path));
+	public static List<String> readScheduleRecords(File file) throws IOException {	
+		List<String> records = new ArrayList<String>();
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			System.out.println(line);
-		}
-		reader.close();		
+			records.add(line);		}
+		reader.close();	
+		
+		return records;
 	}
 }
