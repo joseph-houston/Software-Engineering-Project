@@ -1,5 +1,7 @@
 package com.cs4910.CBWebApp.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +24,17 @@ public class KanbanWorkflowWarningsPdf extends AbstractPdfView {
 		
 		
 		Paragraph header = new Paragraph(new Chunk("Kanban Workflow Warnings",FontFactory.getFont(FontFactory.HELVETICA, 18)));
-		Paragraph by = new Paragraph(new Chunk("Report Data: " + report.display() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));	  
+//		Paragraph by = new Paragraph(new Chunk("Report Data: " + report.display() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		List<Paragraph> paraList = new ArrayList<Paragraph>();
+		for(String s : report.displayPDF())
+		{
+			paraList.add( new Paragraph(s,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		}
 		document.add(header);
-		document.add(by);
+//		document.add(by);
+		for(Paragraph p : paraList)
+		{
+			document.add(p);
+		}
 	 }
 }

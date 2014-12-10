@@ -1,5 +1,7 @@
 package com.cs4910.CBWebApp.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +23,18 @@ public class KanbanActivityPdf extends AbstractPdfView {
 
 		KanbanActivityReport kanbanReport =   (KanbanActivityReport) model.get("command");
 		Paragraph header = new Paragraph(new Chunk("Kanban Activity Report",FontFactory.getFont(FontFactory.HELVETICA, 18)));
-		Paragraph by = new Paragraph(new Chunk("Report Data: " + kanbanReport.toStringPDF() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+//		Paragraph by = new Paragraph(new Chunk("Report Data: " + kanbanReport.toString() ,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		List<Paragraph> paraList = new ArrayList<Paragraph>();
+		for(String s : kanbanReport.toStringPDF())
+		{
+			paraList.add( new Paragraph(s,FontFactory.getFont(FontFactory.HELVETICA, 12)));
+		}
 			  
 		document.add(header);
-		document.add(by);
+//		document.add(by);
+		for(Paragraph p : paraList)
+		{
+			document.add(p);
+		}
 	 }
 }
