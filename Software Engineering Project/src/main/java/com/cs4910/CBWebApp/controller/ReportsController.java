@@ -1,14 +1,21 @@
 package com.cs4910.CBWebApp.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +40,7 @@ import com.danube.scrumworks.api2.client.*;
 /**
  * @author Njenga Gathee
  * 
- * This Controller is a backend controller. It handles all the request made vial ajax on the 
+ * This Controller is a backend controller. It handles all the request made via ajax on the 
  * report page.
  */
 @Controller
@@ -162,45 +169,54 @@ public class ReportsController {
 	 * @param email
 	 * @return
 	 */
+	@Autowired
+	ServletContext servletContext;
 	@RequestMapping(value = "/scheduleEmail", method = RequestMethod.POST)
 	public @ResponseBody String scheduleEmail(@RequestParam String product, @RequestParam String email,
 										HttpServletRequest request) throws IOException{
 		String result = "Product: " + product + " Email: " + email;
 		System.out.println(result);
-		String dataPath  = request.getSession().getServletContext().getRealPath("/WEB-INF/data/emails.dat");
+		//String dataPath  = request.getSession().getServletContext().getRealPath("/WEB-INF/data/emails.dat");
+		
+		File dataPath = new File( servletContext.getRealPath("/WEB-INF/data/emails.dat") );
+		
+		System.out.println(dataPath);
+		
 		
 		System.out.println(dataPath);
 		String record = product + ":" + email;
 		
 		ReportScheduler.storeScheduleRecord(dataPath, record);
-		ReportScheduler.readScheduleRecords(dataPath);
+		//ReportScheduler.readScheduleRecords(dataPath);
 
 		return result;
 	}
 	
-	// @Scheduled(cron="*/20 * * * * ?")
-	 public void sendReport() throws ScrumWorksException {	
-		 System.out.println("Sending report...\n");
+	 @Scheduled(cron="*/20 * * * * ?")
+	 public void sendReport() throws ScrumWorksException, IOException {	
+		 	List<String> scheduleRecords = new ArrayList<String>();
+		 	File dataPath = new File( servletContext.getRealPath("/WEB-INF/data/emails.dat") );
+		 	scheduleRecords = ReportScheduler.readScheduleRecords(dataPath);
 		 	
-			KanbanWorkflowWarnings report = new KanbanWorkflowWarnings("Term-Project");
-		 
-			String recipientAddress = "";
-			String subject = "";
-			String message = report.display();
-			 
-			// prints debug info
-			System.out.println("To: " + recipientAddress);
-			System.out.println("Subject: " + subject);
-			System.out.println("Message: " + message);
-			 
-			// creates a simple e-mail object
-			SimpleMailMessage email = new SimpleMailMessage();
-			email.setTo(recipientAddress);
-			email.setSubject(subject);
-			email.setText(message);
-			 
-			// sends the e-mail
-			mailSender.send(email);
+		 	for(String s : scheduleRecords){
+		 		String[] data = s.split(":");
+		 		String productName = data[0];
+		 		String recipientAddress = data[1];
+				String subject = "Scheduled KanbanWorkflowWarings Report for - " + productName;
+				KanbanWorkflowWarnings report = new KanbanWorkflowWarnings(productName);
+				String message = report.display();
+				SimpleMailMessage email = new SimpleMailMessage();
+				email.setTo(recipientAddress);
+				email.setSubject(subject);
+				email.setText(message);
+				 
+				System.out.println("To: " + recipientAddress);
+				System.out.println("Subject: " + subject);
+				System.out.println("Message: " + message);				
+				
+				// sends the e-mail
+				mailSender.send(email);				
+		 	}		 	 
 	 }
 
 	

@@ -78,9 +78,10 @@ public class UserActivityReport {
 		List<BacklogItemChanges> backlogItemChanges = new ArrayList<BacklogItemChanges>();
 		for(DashboardReleaseStatistics d : dash)
 		{
-
+			//Since it is impossible using the current API to get any sort of revision id, I just put 1 in there, You will need to check your database and place the lowest revision id in there. 
+			//Look in the revisioninfo table in the ScrumWorks Database
 			try {
-				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 30).getBacklogItemChanges();
+				backlogItemChanges = apiService.getChangesSinceRevision(selectedProduct.getId(), 1).getBacklogItemChanges();
 			} catch (ScrumWorksException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -95,9 +96,10 @@ public class UserActivityReport {
 		}
 		
 		List<RevisionInfo> usersRevisionInfo = new ArrayList<RevisionInfo>();
+		//If the selectedUser has not made any updates in the given date range than it will break the app.
 		for(RevisionInfo rInfo : revisionInfo)
 		{
-			if(rInfo.getUserName().equals("administrator"))
+			if(rInfo.getUserName().equals(selectedUser.getName()))
 			{
 				usersRevisionInfo.add(rInfo);
 			}
@@ -239,12 +241,47 @@ public class UserActivityReport {
 //				//includeDetails here on each specific day.
 //			}
 //		}
+		try{
+		int date;
+		int month;
+		int year;
+		int oldDate = usersRevisionInfo.get(0).getTimeStamp().getDate();
+		int oldMonth = usersRevisionInfo.get(0).getTimeStamp().getMonth() + 1;
+		int oldYear = usersRevisionInfo.get(0).getTimeStamp().getYear() + 1900;
+		String report_append = "";
+		int updateCount=1;
 		
 		for(RevisionInfo uRI : usersRevisionInfo)
 		{
-			report += uRI.getTimeStamp().toString().replaceAll("00:00:00 CST ", "") + " - " + " updates in X" + "<br />";
+			date = uRI.getTimeStamp().getDate();
+			month = uRI.getTimeStamp().getMonth() + 1;
+			year = uRI.getTimeStamp().getYear() + 1900;
+
+			System.out.println(date + " " + oldDate);
+			if(date == oldDate && month == oldMonth && year == oldYear && usersRevisionInfo.get(0).getRevisionNumber() != uRI.getRevisionNumber()){
+				updateCount++;
+				report_append = month + "/" + date + "/" + year + " - " + updateCount + " updates in " +apiService.getTeamById(selectedProduct.getTeamIds().get(0)).getType()  + "<br />";
+
+			}
+			else{
+				if(usersRevisionInfo.get(1).getRevisionNumber() != uRI.getRevisionNumber()){
+						report += report_append;
+						report += month + "/" + date + "/" + year + " - " + updateCount + " updates in "+ apiService.getTeamById(selectedProduct.getTeamIds().get(0)).getType()+ "<br />";
+				}
+				oldDate = date;
+				oldMonth = month;
+				oldYear = year;
+				if(usersRevisionInfo.get(1).getRevisionNumber() != uRI.getRevisionNumber())
+					updateCount = 0;
+				else
+					updateCount = 1;
+				report_append = "";
+			}
 		}
-		
+		} catch (ScrumWorksException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		report += "Number of Days: " + usersRevisionInfo.size() + "<br />";
 		
