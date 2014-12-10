@@ -95,9 +95,10 @@ public class UserActivityReport {
 		}
 		
 		List<RevisionInfo> usersRevisionInfo = new ArrayList<RevisionInfo>();
+		//If the selectedUser has not made any updates in the given date range than it will break the app.
 		for(RevisionInfo rInfo : revisionInfo)
 		{
-			if(rInfo.getUserName().equals("administrator"))
+			if(rInfo.getUserName().equals(selectedUser.getName()))
 			{
 				usersRevisionInfo.add(rInfo);
 			}
